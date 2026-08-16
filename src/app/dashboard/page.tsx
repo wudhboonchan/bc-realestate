@@ -60,7 +60,6 @@ export default function DashboardPage() {
               <h1 className="text-2xl font-bold tracking-tight text-stone-900 font-serif">
                 {selectedMonth}
               </h1>
-              <span className="text-sm text-stone-500 font-light">— ฉบับปัจจุบัน</span>
             </div>
             <span className="text-xs text-stone-500 block">
               {property.name} • {property.address}
