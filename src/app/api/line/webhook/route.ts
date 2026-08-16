@@ -16,10 +16,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const events = body.events || [];
 
-    const channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+    // Support token from URL parameter e.g. /api/line/webhook?token=... or Vercel env variable
+    const urlToken = request.nextUrl.searchParams.get('token') || request.nextUrl.searchParams.get('channelAccessToken');
+    const channelAccessToken = urlToken || process.env.LINE_CHANNEL_ACCESS_TOKEN;
 
     if (!channelAccessToken) {
-      console.warn('LINE Webhook Warning: LINE_CHANNEL_ACCESS_TOKEN is missing in process.env');
+      console.warn('LINE Webhook Warning: LINE_CHANNEL_ACCESS_TOKEN is missing in process.env and query params');
     }
 
     for (const event of events) {
