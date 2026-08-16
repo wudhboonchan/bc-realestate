@@ -248,13 +248,13 @@ function LineBindForm() {
 
                 {/* Room Number Input */}
                 <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-semibold text-stone-700 flex items-center space-x-1">
-                      <Building2 className="w-3.5 h-3.5 text-[#963720]" />
-                      <span>{labels.roomLabel}</span>
-                    </label>
-                    <span className="text-[10px] text-stone-400 font-medium">{labels.roomHint}</span>
-                  </div>
+                  <label className="block text-xs font-semibold text-stone-700 flex items-center space-x-1">
+                    <Building2 className="w-3.5 h-3.5 text-[#963720]" />
+                    <span>{labels.roomLabel}</span>
+                  </label>
+                  <p className="text-[11px] text-stone-400 font-medium block">
+                    {labels.roomHint}
+                  </p>
                   <input
                     type="text"
                     maxLength={2}
@@ -269,13 +269,13 @@ function LineBindForm() {
 
                 {/* Phone Number Input */}
                 <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-semibold text-stone-700 flex items-center space-x-1">
-                      <Phone className="w-3.5 h-3.5 text-[#963720]" />
-                      <span>{labels.phoneLabel}</span>
-                    </label>
-                    <span className="text-[10px] text-stone-400 font-medium">{labels.phoneHint}</span>
-                  </div>
+                  <label className="block text-xs font-semibold text-stone-700 flex items-center space-x-1">
+                    <Phone className="w-3.5 h-3.5 text-[#963720]" />
+                    <span>{labels.phoneLabel}</span>
+                  </label>
+                  <p className="text-[11px] text-stone-400 font-medium block">
+                    {labels.phoneHint}
+                  </p>
                   <input
                     type="tel"
                     maxLength={10}
