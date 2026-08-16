@@ -120,13 +120,12 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Top Control Bar */}
         <div className="flex items-center justify-between bg-white p-3 px-4 rounded-2xl border border-[#E2DDD5] shadow-2xs print:hidden">
-          <Link
-            href="/invoices"
-            className="text-xs font-semibold text-stone-600 hover:text-stone-900 flex items-center space-x-1"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>กลับสู่หน้ารายการ</span>
-          </Link>
+          <div className="flex items-center space-x-2">
+            <Building2 className="w-5 h-5 text-[#963720]" />
+            <span className="text-xs font-bold text-stone-900 font-serif">
+              {property?.name || 'หอพักตาลเดี่ยว'} · ใบแจ้งหนี้สำหรับผู้เช่า
+            </span>
+          </div>
 
           <div className="flex items-center space-x-2">
             {/* Language switch */}

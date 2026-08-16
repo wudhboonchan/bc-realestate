@@ -551,6 +551,19 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       lineBoundAt: new Date().toISOString(),
       ...(preferredLanguage ? { preferredLanguage } : {}),
     });
+
+    if (preferredLanguage) {
+      setBills((prevBills) =>
+        prevBills.map((b) => {
+          if (b.tenantId === tenantId) {
+            const updatedBill = { ...b, receiptLanguage: preferredLanguage };
+            saveToFirestore('bills', updatedBill);
+            return updatedBill;
+          }
+          return b;
+        })
+      );
+    }
   };
 
   const sendInvoiceViaLine = async (billId: string) => {

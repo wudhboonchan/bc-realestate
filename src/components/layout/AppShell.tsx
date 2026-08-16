@@ -1,12 +1,24 @@
 'use client';
 
 import React, { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { TopHeader } from '@/components/layout/TopHeader';
 import { Footer } from '@/components/layout/Footer';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Public tenant-facing routes should not display the admin sidebar or top header
+  const isPublicTenantPage =
+    pathname.startsWith('/liff') ||
+    pathname.startsWith('/invoice/') ||
+    pathname === '/invoice';
+
+  if (isPublicTenantPage) {
+    return <div className="min-h-screen bg-[#FAF7F2]">{children}</div>;
+  }
 
   return (
     <div className="flex w-full min-h-screen">
