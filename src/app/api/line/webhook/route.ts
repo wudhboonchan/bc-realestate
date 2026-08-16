@@ -18,13 +18,17 @@ export async function POST(request: NextRequest) {
 
     const channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
 
+    if (!channelAccessToken) {
+      console.warn('LINE Webhook Warning: LINE_CHANNEL_ACCESS_TOKEN is missing in process.env');
+    }
+
     for (const event of events) {
       if (event.type === 'follow' || event.type === 'message') {
         const replyToken = event.replyToken;
         const lineUserId = event.source?.userId;
         const userText = event.message?.text?.trim() || '';
 
-        if (replyToken && channelAccessToken && lineUserId) {
+        if (replyToken && lineUserId && channelAccessToken) {
           const domain = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'bc-apartment.vercel.app';
           const hostUrl = domain.startsWith('http') ? domain : `https://${domain}`;
           
@@ -33,8 +37,7 @@ export async function POST(request: NextRequest) {
 
           let replyTextMessage = `ยินดีต้อนรับสู่ระบบหอพักตาลเดี่ยว! 🏢\n\nกรุณากดลิงก์ด้านล่างนี้เพื่อผูกบัญชี LINE กับห้องพักของคุณ (ระบบจะดึงรหัส LINE อัตโนมัติ ไม่ต้องกรอกรหัสยุ่งยากครับ):\n\n🔗 ${bindUrl}`;
 
-          // Check if user typed room number directly e.g. "A1", "B2", "C3"
-          if (userText && userText.length <= 10) {
+          if (userText) {
             replyTextMessage = `ขอบคุณที่ติดต่อหอพักตาลเดี่ยวค่ะ 🏢\n\nหากท่านต้องการผูกบัญชีเพื่อรับใบแจ้งหนี้ค่าเช่าประจำเดือน กรุณากดลิงก์ด้านล่างนี้ได้เลยค่ะ (ไม่ต้องกรอกรหัส LINE ID):\n\n🔗 ${bindUrl}`;
           }
 
