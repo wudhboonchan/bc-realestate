@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useProperty } from '@/context/PropertyContext';
-import { Settings, Save, Plus, QrCode } from 'lucide-react';
+import { Settings, Save, Plus, QrCode, MessageSquare } from 'lucide-react';
 
 export default function SettingsPage() {
   const { property, updatePropertyRates, zones, addZone } = useProperty();
@@ -14,6 +14,9 @@ export default function SettingsPage() {
   const [promptPayId, setPromptPayId] = useState(property.promptPayId || '3190200356040');
   const [promptPayName, setPromptPayName] = useState(property.promptPayName || 'กนกกชกร เกียรติวีระสกุล');
 
+  const [lineChannelAccessToken, setLineChannelAccessToken] = useState(property.lineChannelAccessToken || '');
+  const [lineChannelSecret, setLineChannelSecret] = useState(property.lineChannelSecret || '');
+
   const [newZoneCode, setNewZoneCode] = useState('');
   const [newZoneName, setNewZoneName] = useState('');
 
@@ -24,6 +27,8 @@ export default function SettingsPage() {
       setGarbageFee(property.garbageFeePerRoom);
       setPromptPayId(property.promptPayId || '3190200356040');
       setPromptPayName(property.promptPayName || 'กนกกชกร เกียรติวีระสกุล');
+      setLineChannelAccessToken(property.lineChannelAccessToken || '');
+      setLineChannelSecret(property.lineChannelSecret || '');
     }
   }, [property]);
 
@@ -35,8 +40,10 @@ export default function SettingsPage() {
       garbageFeePerRoom: Number(garbageFee),
       promptPayId,
       promptPayName,
+      lineChannelAccessToken,
+      lineChannelSecret,
     });
-    alert('บันทึกอัตราค่าน้ำ ค่าไฟ ค่าขยะ และบัญชี PromptPay เรียบร้อยแล้ว!');
+    alert('บันทึกอัตราค่าบริการ, PromptPay และรหัส LINE Channel Access Token เรียบร้อยแล้ว!');
   };
 
   const handleAddZone = (e: React.FormEvent) => {
@@ -152,6 +159,45 @@ export default function SettingsPage() {
                 placeholder="เช่น กนกกชกร เกียรติวีระสกุล"
                 className="w-full p-2.5 border border-[#E2DDD5] rounded-xl font-semibold text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
                 required
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* LINE Messaging API Settings */}
+        <div className="pt-3 border-t border-[#E2DDD5] space-y-3">
+          <div className="flex items-center space-x-2 font-serif font-bold text-stone-900 text-sm">
+            <MessageSquare className="w-4 h-4 text-emerald-600" />
+            <span>3. ตั้งค่าการเชื่อมต่อ LINE Official Account (LINE Messaging API)</span>
+          </div>
+          <p className="text-[11px] text-stone-500">
+            คุณสามารถวางรหัส <code className="bg-stone-100 px-1 py-0.5 rounded text-stone-800">Channel Access Token</code> ที่คัดลอกมาจาก LINE Developers Console ตรงนี้ เพื่อให้ระบบสามารถยิงข้อความจริงเข้า LINE มือถือผู้เช่าได้ทันที
+          </p>
+
+          <div className="space-y-3 text-xs">
+            <div>
+              <label className="block text-stone-700 font-semibold mb-1">
+                LINE Channel Access Token (v2 long-lived token)
+              </label>
+              <textarea
+                value={lineChannelAccessToken}
+                onChange={(e) => setLineChannelAccessToken(e.target.value)}
+                placeholder="วางรหัส Channel Access Token ตัวยาวๆ ที่คัดลอกมาจาก LINE Developers..."
+                rows={3}
+                className="w-full p-2.5 border border-[#E2DDD5] rounded-xl font-mono text-[11px] text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-stone-700 font-semibold mb-1">
+                LINE Channel Secret (ถ้ามี)
+              </label>
+              <input
+                type="password"
+                value={lineChannelSecret}
+                onChange={(e) => setLineChannelSecret(e.target.value)}
+                placeholder="วางรหัส Channel Secret..."
+                className="w-full p-2.5 border border-[#E2DDD5] rounded-xl font-mono text-xs text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
               />
             </div>
           </div>

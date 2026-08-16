@@ -8,10 +8,11 @@ export const revalidate = 0;
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { bills, tenants, propertyName = 'หอพักตาลเดี่ยว' } = body as {
+    const { bills, tenants, propertyName = 'หอพักตาลเดี่ยว', channelAccessToken: bodyToken } = body as {
       bills: MonthlyBill[];
       tenants: Tenant[];
       propertyName?: string;
+      channelAccessToken?: string;
     };
 
     if (!bills || !Array.isArray(bills) || bills.length === 0) {
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const rawToken = process.env.LINE_CHANNEL_ACCESS_TOKEN || '';
+    const rawToken = bodyToken || process.env.LINE_CHANNEL_ACCESS_TOKEN || process.env.NEXT_PUBLIC_LINE_CHANNEL_ACCESS_TOKEN || '';
     const channelAccessToken = rawToken.replace(/^["']|["']$/g, '').trim();
     const origin = request.headers.get('origin') || request.headers.get('host') || 'bc-apartment.vercel.app';
     const protocol = origin.includes('localhost') ? 'http' : 'https';

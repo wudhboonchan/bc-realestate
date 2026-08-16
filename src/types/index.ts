@@ -14,6 +14,8 @@ export interface Property {
   promptPayId?: string;
   promptPayName?: string;
   peaCaNumber?: string; // 12-digit PEA Customer Account Number for automatic billing fetch
+  lineChannelAccessToken?: string;
+  lineChannelSecret?: string;
   description?: string;
 }
 

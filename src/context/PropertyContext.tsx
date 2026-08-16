@@ -53,6 +53,8 @@ interface PropertyContextType {
     peaCaNumber?: string;
     promptPayId?: string;
     promptPayName?: string;
+    lineChannelAccessToken?: string;
+    lineChannelSecret?: string;
   }) => void;
   sendInvoiceViaLine: (billId: string) => Promise<{ success: boolean; message: string }>;
   sendAllInvoicesViaLine: (monthYear?: string) => Promise<{ success: boolean; count: number; message: string }>;
@@ -524,6 +526,8 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     peaCaNumber?: string;
     promptPayId?: string;
     promptPayName?: string;
+    lineChannelAccessToken?: string;
+    lineChannelSecret?: string;
   }) => {
     setProperty((prev) => {
       const updated = {
@@ -533,6 +537,8 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         promptPayId: rates.promptPayId || REAL_PROMPTPAY_ID,
         promptPayName: rates.promptPayName || REAL_ACCOUNT_NAME,
         peaCaNumber: rates.peaCaNumber !== undefined ? rates.peaCaNumber : (prev.peaCaNumber || ''),
+        lineChannelAccessToken: rates.lineChannelAccessToken !== undefined ? rates.lineChannelAccessToken : (prev.lineChannelAccessToken || ''),
+        lineChannelSecret: rates.lineChannelSecret !== undefined ? rates.lineChannelSecret : (prev.lineChannelSecret || ''),
       };
       saveToFirestore('properties', updated);
       return updated;
@@ -561,6 +567,7 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           bills: [targetBill],
           tenants,
           propertyName: property.name,
+          channelAccessToken: property.lineChannelAccessToken,
         }),
       });
 
@@ -609,6 +616,7 @@ export const PropertyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           bills: currentBills,
           tenants,
           propertyName: property.name,
+          channelAccessToken: property.lineChannelAccessToken,
         }),
       });
 
