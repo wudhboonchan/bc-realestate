@@ -32,19 +32,19 @@ export function generateInvoiceFlexMessage(
   // Multi-language text strings (Action label must be max 20 characters according to LINE API spec)
   const texts = isBurmese
     ? {
-        altText: `လစဉ် ဘေလ်စာရင်း ${formattedMonth} - ห้อง ${bill.roomNumber}`,
+        altText: `လစဉ် ဘေလ်စာရင်း ${formattedMonth} - အခန်း ${bill.roomNumber}`,
         headerTitle: 'လစဉ် ဘေလ်စာရင်း',
-        headerPeriod: `ประจำเดือน: ${formattedMonth}`,
-        roomLabel: 'ห้อง:',
-        tenantLabel: 'ผู้เช่า:',
-        rentLabel: 'ค่าเช่าห้อง',
-        waterLabel: `ค่าน้ำ (${bill.waterUnits || 0} หน่วย)`,
-        elecLabel: `ค่าไฟ (${bill.elecUnits || 0} หน่วย)`,
-        garbageLabel: 'ค่าขยะ',
-        totalLabel: 'ยอดรวมสุทธิ',
-        dueDateLabel: 'กำหนดชำระ:',
-        buttonLabel: 'ดูบิล / ชำระเงิน',
-        tagLine: 'ขอบคุณครับ / ကျေးဇူးတင်ပါသည်။',
+        headerPeriod: `လအတွက်: ${formattedMonth}`,
+        roomLabel: 'အခန်း:',
+        tenantLabel: 'အိမ်ငှား:',
+        rentLabel: 'အခန်းခ',
+        waterLabel: `ရေဖိုး (${bill.waterUnits || 0} ယူနစ်)`,
+        elecLabel: `မီးဖိုး (${bill.elecUnits || 0} ယူနစ်)`,
+        garbageLabel: 'အမှိုက်ခ',
+        totalLabel: 'စုစုပေါင်း ပေးရန်',
+        dueDateLabel: 'ပေးရန်ရက်:',
+        buttonLabel: 'ဘေလ်ကြည့်ရန် / ပေးရန်',
+        tagLine: 'ကျေးဇူးတင်ပါသည်။',
       }
     : {
         altText: `ใบแจ้งหนี้ประจำเดือน ${formattedMonth} - ห้อง ${bill.roomNumber}`,
@@ -255,7 +255,7 @@ export function generateInvoiceFlexMessage(
           contents: [
             {
               type: 'text',
-              text: `${texts.dueDateLabel} ${bill.dueDate || 'ภายในวันที่ 5 ของเดือน'}`,
+              text: `${texts.dueDateLabel} ${bill.dueDate || ''}`,
               size: 'xxs',
               color: '#78716C',
               align: 'center',
