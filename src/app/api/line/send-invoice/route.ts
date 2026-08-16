@@ -19,13 +19,13 @@ export async function POST(request: NextRequest) {
     }
 
     const channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-    const origin = request.headers.get('origin') || request.headers.get('host') || '';
+    const origin = request.headers.get('origin') || request.headers.get('host') || 'bc-apartment.vercel.app';
     const protocol = origin.includes('localhost') ? 'http' : 'https';
     const baseUrl = origin
       ? origin.startsWith('http')
         ? origin
         : `${protocol}://${origin}`
-      : 'http://localhost:3000';
+      : 'https://bc-apartment.vercel.app';
 
     const deliveryLogs: LineDeliveryLog[] = [];
     const updatedBillStatuses: { billId: string; status: 'sent' | 'failed'; sentAt: string; error?: string }[] = [];
@@ -64,7 +64,8 @@ export async function POST(request: NextRequest) {
       if (channelAccessToken) {
         // Send real LINE Push Message via LINE Messaging API
         try {
-          const res = await fetch('https://api.line.me/v2/bot/message/push', {
+          // Attempt Flex Message first
+          let res = await fetch('https://api.line.me/v2/bot/message/push', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -75,6 +76,29 @@ export async function POST(request: NextRequest) {
               messages: [flexMsg],
             }),
           });
+
+          // Fallback to rich Text Message if Flex structure returns error
+          if (!res.ok) {
+            const errFlexText = await res.text();
+            console.warn('Flex push failed, sending Text fallback:', errFlexText);
+
+            const isBurmese = tenantLanguage === 'MY' || tenantLanguage === 'MM';
+            const textInvoice = isBurmese
+              ? `📄 ${propertyName}\nလစဉ် ဘေလ်စာရင်း (${bill.monthYear})\nห้อง: ${bill.roomNumber}\nผู้เช่า: ${bill.tenantName}\n\n• ค่าเช่า: ฿${(bill.rentAmount || 0).toLocaleString()}\n• ค่าน้ำ: ฿${(bill.waterAmount || 0).toLocaleString()}\n• ค่าไฟ: ฿${(bill.elecAmount || 0).toLocaleString()}\n• ค่าขยะ: ฿${(bill.garbageFee || 0).toLocaleString()}\n\n💰 ยอดรวม: ฿${(bill.totalAmount || 0).toLocaleString()}\n⏰ กำหนดชำระ: ${bill.dueDate}\n\n🔗 ดูรายละเอียดบิล/ชำระเงิน:\n${baseUrl}/invoice/${bill.id}`
+              : `📄 ${propertyName}\nใบแจ้งหนี้ค่าเช่าประจำเดือน (${bill.monthYear})\nห้อง: ${bill.roomNumber}\nผู้เช่า: ${bill.tenantName}\n\n• ค่าเช่าห้อง: ฿${(bill.rentAmount || 0).toLocaleString()}\n• ค่าน้ำประปา: ฿${(bill.waterAmount || 0).toLocaleString()}\n• ค่าไฟฟ้า: ฿${(bill.elecAmount || 0).toLocaleString()}\n• ค่าบริการขยะ: ฿${(bill.garbageFee || 0).toLocaleString()}\n\n💰 ยอดรวมสุทธิ: ฿${(bill.totalAmount || 0).toLocaleString()}\n⏰ กำหนดชำระเงิน: ${bill.dueDate}\n\n🔗 เปิดดูบิลและสแกน QR ชำระเงิน:\n${baseUrl}/invoice/${bill.id}`;
+
+            res = await fetch('https://api.line.me/v2/bot/message/push', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${channelAccessToken}`,
+              },
+              body: JSON.stringify({
+                to: lineUserId,
+                messages: [{ type: 'text', text: textInvoice }],
+              }),
+            });
+          }
 
           if (res.ok) {
             const now = new Date().toISOString();

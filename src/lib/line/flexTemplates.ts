@@ -1,7 +1,8 @@
-import { MonthlyBill, LanguageOption } from '@/types';
+import { MonthlyBill } from '@/types';
 
 /**
- * Builds a LINE Flex Message Payload for an Invoice in Thai or Burmese.
+ * Builds an official LINE Flex Message Payload for an Invoice in Thai or Burmese.
+ * Strictly formatted to LINE Messaging API Flex Spec.
  *
  * @param bill The monthly bill data
  * @param propertyName Dormitory name
@@ -14,7 +15,11 @@ export function generateInvoiceFlexMessage(
   baseUrl: string = ''
 ) {
   const isBurmese = bill.receiptLanguage === 'MY' || bill.receiptLanguage === 'MM';
-  const cleanBaseUrl = baseUrl || (typeof window !== 'undefined' ? window.location.origin : '');
+  const cleanBaseUrl = baseUrl
+    ? baseUrl.startsWith('http')
+      ? baseUrl
+      : `https://${baseUrl}`
+    : 'https://bc-apartment.vercel.app';
   const invoiceUrl = `${cleanBaseUrl}/invoice/${bill.id}`;
 
   const formattedMonth = bill.monthYear;
@@ -27,19 +32,19 @@ export function generateInvoiceFlexMessage(
   // Multi-language text strings (Action label must be max 20 characters according to LINE API spec)
   const texts = isBurmese
     ? {
-        altText: `လစဉ် ဘေလ်စာရင်း ${formattedMonth} - อุปกรณ์ ${bill.roomNumber}`,
+        altText: `လစဉ် ဘေလ်စာရင်း ${formattedMonth} - ห้อง ${bill.roomNumber}`,
         headerTitle: 'လစဉ် ဘေလ်စာရင်း',
-        headerPeriod: `ประจำเดือน / လအတွက်: ${formattedMonth}`,
-        roomLabel: 'အခန်း / ห้อง:',
-        tenantLabel: 'အိမ်ငှား / ผู้เช่า:',
-        rentLabel: 'အခန်းခ (ค่าเช่าห้อง)',
-        waterLabel: `ရေဖိုး (ค่าน้ำ ${bill.waterUnits || 0} หน่วย)`,
-        elecLabel: `မီးဖိုး (ค่าไฟ ${bill.elecUnits || 0} หน่วย)`,
-        garbageLabel: 'အမှိုက်ခ (ค่าขยะ)',
-        totalLabel: 'စုစုပေါင်း (ยอดรวมสุทธิ)',
-        dueDateLabel: 'ပေးရန်ရက် / กำหนดชำระ:',
-        buttonLabel: 'ကြည့်ရန် / ငွေပေးချေရန်',
-        tagLine: 'ကျေးဇူးတင်ပါသည်။ / ขอบคุณครับ',
+        headerPeriod: `ประจำเดือน: ${formattedMonth}`,
+        roomLabel: 'ห้อง:',
+        tenantLabel: 'ผู้เช่า:',
+        rentLabel: 'ค่าเช่าห้อง',
+        waterLabel: `ค่าน้ำ (${bill.waterUnits || 0} หน่วย)`,
+        elecLabel: `ค่าไฟ (${bill.elecUnits || 0} หน่วย)`,
+        garbageLabel: 'ค่าขยะ',
+        totalLabel: 'ยอดรวมสุทธิ',
+        dueDateLabel: 'กำหนดชำระ:',
+        buttonLabel: 'ดูบิล / ชำระเงิน',
+        tagLine: 'ขอบคุณครับ / ကျေးဇူးတင်ပါသည်။',
       }
     : {
         altText: `ใบแจ้งหนี้ประจำเดือน ${formattedMonth} - ห้อง ${bill.roomNumber}`,
@@ -63,7 +68,7 @@ export function generateInvoiceFlexMessage(
       type: 'box',
       layout: 'vertical',
       backgroundColor: '#963720',
-      paddingAll: '20px',
+      paddingAll: 'lg',
       contents: [
         {
           type: 'text',
@@ -86,28 +91,24 @@ export function generateInvoiceFlexMessage(
           color: '#FFFFFF',
           size: 'xs',
           margin: 'sm',
-          opacity: 0.9,
         },
       ],
     },
     body: {
       type: 'box',
       layout: 'vertical',
-      paddingAll: '20px',
+      paddingAll: 'lg',
       backgroundColor: '#FAF7F2',
       contents: [
-        // Tenant Name Row
         {
           type: 'box',
-          layout: 'baseline',
-          margin: 'none',
+          layout: 'horizontal',
           contents: [
             {
               type: 'text',
               text: texts.tenantLabel,
               size: 'xs',
               color: '#78716C',
-              flex: 3,
             },
             {
               type: 'text',
@@ -115,7 +116,6 @@ export function generateInvoiceFlexMessage(
               size: 'xs',
               color: '#1C1917',
               weight: 'bold',
-              flex: 7,
               align: 'end',
             },
           ],
@@ -125,24 +125,21 @@ export function generateInvoiceFlexMessage(
           margin: 'md',
           color: '#E2DDD5',
         },
-        // Item breakdown
         {
           type: 'box',
           layout: 'vertical',
           margin: 'md',
           spacing: 'sm',
           contents: [
-            // Rent
             {
               type: 'box',
-              layout: 'baseline',
+              layout: 'horizontal',
               contents: [
                 {
                   type: 'text',
                   text: texts.rentLabel,
                   size: 'xs',
                   color: '#44403C',
-                  flex: 7,
                 },
                 {
                   type: 'text',
@@ -150,22 +147,19 @@ export function generateInvoiceFlexMessage(
                   size: 'xs',
                   color: '#1C1917',
                   weight: 'bold',
-                  flex: 3,
                   align: 'end',
                 },
               ],
             },
-            // Water
             {
               type: 'box',
-              layout: 'baseline',
+              layout: 'horizontal',
               contents: [
                 {
                   type: 'text',
                   text: texts.waterLabel,
                   size: 'xs',
                   color: '#44403C',
-                  flex: 7,
                 },
                 {
                   type: 'text',
@@ -173,22 +167,19 @@ export function generateInvoiceFlexMessage(
                   size: 'xs',
                   color: '#1C1917',
                   weight: 'bold',
-                  flex: 3,
                   align: 'end',
                 },
               ],
             },
-            // Electricity
             {
               type: 'box',
-              layout: 'baseline',
+              layout: 'horizontal',
               contents: [
                 {
                   type: 'text',
                   text: texts.elecLabel,
                   size: 'xs',
                   color: '#44403C',
-                  flex: 7,
                 },
                 {
                   type: 'text',
@@ -196,22 +187,19 @@ export function generateInvoiceFlexMessage(
                   size: 'xs',
                   color: '#1C1917',
                   weight: 'bold',
-                  flex: 3,
                   align: 'end',
                 },
               ],
             },
-            // Garbage
             {
               type: 'box',
-              layout: 'baseline',
+              layout: 'horizontal',
               contents: [
                 {
                   type: 'text',
                   text: texts.garbageLabel,
                   size: 'xs',
                   color: '#44403C',
-                  flex: 7,
                 },
                 {
                   type: 'text',
@@ -219,7 +207,6 @@ export function generateInvoiceFlexMessage(
                   size: 'xs',
                   color: '#1C1917',
                   weight: 'bold',
-                  flex: 3,
                   align: 'end',
                 },
               ],
@@ -231,20 +218,16 @@ export function generateInvoiceFlexMessage(
           margin: 'lg',
           color: '#D8C7B5',
         },
-        // Total Amount Box
         {
           type: 'box',
           layout: 'vertical',
           margin: 'lg',
           backgroundColor: '#FFFFFF',
-          paddingAll: '12px',
-          cornerRadius: '8px',
-          borderWidth: '1px',
-          borderColor: '#E2DDD5',
+          paddingAll: 'md',
           contents: [
             {
               type: 'box',
-              layout: 'baseline',
+              layout: 'horizontal',
               contents: [
                 {
                   type: 'text',
@@ -252,7 +235,6 @@ export function generateInvoiceFlexMessage(
                   size: 'xs',
                   color: '#963720',
                   weight: 'bold',
-                  flex: 6,
                 },
                 {
                   type: 'text',
@@ -260,17 +242,15 @@ export function generateInvoiceFlexMessage(
                   size: 'lg',
                   color: '#963720',
                   weight: 'bold',
-                  flex: 4,
                   align: 'end',
                 },
               ],
             },
           ],
         },
-        // Due Date
         {
           type: 'box',
-          layout: 'baseline',
+          layout: 'horizontal',
           margin: 'md',
           contents: [
             {
@@ -287,7 +267,7 @@ export function generateInvoiceFlexMessage(
     footer: {
       type: 'box',
       layout: 'vertical',
-      paddingAll: '16px',
+      paddingAll: 'md',
       backgroundColor: '#FFFFFF',
       contents: [
         {
@@ -299,7 +279,6 @@ export function generateInvoiceFlexMessage(
           },
           style: 'primary',
           color: '#963720',
-          height: 'sm',
         },
         {
           type: 'text',
