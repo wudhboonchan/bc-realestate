@@ -156,7 +156,7 @@ export function VisualFloorPlan() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2.5 items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 items-start">
             {/* Column 1: B1 to B7 */}
             <div className="space-y-1.5">
               <div className="text-[10px] font-semibold text-stone-600 text-center bg-stone-100 py-0.5 rounded border border-stone-200">
@@ -197,7 +197,7 @@ export function VisualFloorPlan() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2.5 items-start">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 items-start">
             {/* Column 1: D1 to D7 */}
             <div className="space-y-1.5">
               <div className="text-[10px] font-semibold text-stone-600 text-center bg-stone-100 py-0.5 rounded border border-stone-200">

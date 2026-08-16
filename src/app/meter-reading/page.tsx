@@ -309,8 +309,115 @@ export default function MeterReadingPage() {
         ))}
       </div>
 
-      {/* SPREADSHEET ENTRY TABLE */}
-      <div className="bg-white rounded-2xl border border-[#E2DDD5] overflow-hidden shadow-2xs">
+      {/* MOBILE CARD VIEW FOR SMARTPHONES (< md breakpoint) */}
+      <div className="space-y-3 md:hidden">
+        {filteredRooms.map((room) => {
+          const tenant = tenants.find((t) => t.id === room.currentTenantId || t.assignedRoomId === room.id);
+          const hasTenant = Boolean(tenant);
+          const input = getRoomInput(room);
+          const waterCurrNum = input.waterCurrent === '' ? input.waterPrevious : Number(input.waterCurrent);
+          const elecCurrNum = input.elecCurrent === '' ? input.elecPrevious : Number(input.elecCurrent);
+          const waterUnits = Math.max(0, waterCurrNum - input.waterPrevious);
+          const elecUnits = Math.max(0, elecCurrNum - input.elecPrevious);
+          const waterAmount = waterUnits * property.waterRatePerUnit;
+          const elecAmount = elecUnits * property.elecRatePerUnit;
+          const garbageFee = hasTenant ? property.garbageFeePerRoom : 0;
+          const rentAmount = hasTenant ? room.rentPrice : 0;
+          const totalBill = rentAmount + waterAmount + elecAmount + garbageFee;
+
+          return (
+            <div
+              key={room.id}
+              className="bg-white p-4 rounded-2xl border border-[#E2DDD5] shadow-2xs space-y-3 text-xs"
+            >
+              {/* Room & Tenant Header */}
+              <div className="flex items-center justify-between pb-2 border-b border-stone-100">
+                <div className="flex items-center space-x-2">
+                  <span className={`px-2 py-0.5 rounded font-mono font-bold text-xs ${getZoneColorStyle(room.zoneCode)}`}>
+                    {room.roomNumber}
+                  </span>
+                  <span className="font-bold text-stone-900 text-xs truncate max-w-[140px]">
+                    {hasTenant && tenant ? `${tenant.nationality === 'MM' ? '🇲🇲' : '🇹🇭'} ${tenant.firstName} ${tenant.lastName}` : 'ห้องว่าง'}
+                  </span>
+                </div>
+                <span className="font-mono font-bold text-sm text-[#963720]">
+                  ฿{totalBill.toLocaleString()}
+                </span>
+              </div>
+
+              {/* Water & Elec Meter Input Grid */}
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {/* Water Meter Box */}
+                <div className="p-2.5 bg-blue-50/60 rounded-xl border border-blue-200 space-y-1.5">
+                  <span className="font-bold text-blue-900 text-[11px] block">💧 มิเตอร์น้ำ</span>
+                  <div className="text-[10px] text-stone-500">ก่อน: <span className="font-mono font-bold text-stone-800">{input.waterPrevious}</span></div>
+                  <div>
+                    <label className="text-[10px] text-stone-500 block mb-0.5">ครั้งนี้:</label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      value={input.waterCurrent}
+                      onChange={(e) => handleInputChange(room.id, 'waterCurrent', e.target.value)}
+                      onFocus={(e) => e.target.select()}
+                      className="w-full text-center py-1.5 px-2 bg-white border border-blue-400 rounded-lg font-mono font-bold text-sm outline-none focus:ring-2 focus:ring-blue-600 text-stone-900"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] pt-1">
+                    <span className="font-bold text-blue-900">{waterUnits} หน่วย</span>
+                    <span className="font-semibold text-stone-700">฿{waterAmount}</span>
+                  </div>
+                </div>
+
+                {/* Elec Meter Box */}
+                <div className="p-2.5 bg-amber-50/60 rounded-xl border border-amber-200 space-y-1.5">
+                  <span className="font-bold text-amber-900 text-[11px] block">⚡ มิเตอร์ไฟ</span>
+                  <div className="text-[10px] text-stone-500">ก่อน: <span className="font-mono font-bold text-stone-800">{input.elecPrevious}</span></div>
+                  <div>
+                    <label className="text-[10px] text-stone-500 block mb-0.5">ครั้งนี้:</label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      value={input.elecCurrent}
+                      onChange={(e) => handleInputChange(room.id, 'elecCurrent', e.target.value)}
+                      onFocus={(e) => e.target.select()}
+                      className="w-full text-center py-1.5 px-2 bg-white border border-amber-400 rounded-lg font-mono font-bold text-sm outline-none focus:ring-2 focus:ring-amber-600 text-stone-900"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] pt-1">
+                    <span className="font-bold text-amber-900">{elecUnits} หน่วย</span>
+                    <span className="font-semibold text-stone-700">฿{elecAmount}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action buttons */}
+              {hasTenant && (
+                <div className="flex gap-2 pt-1">
+                  <button
+                    onClick={() => handleSaveSingleRoom(room)}
+                    className="flex-1 py-2 bg-stone-900 hover:bg-black text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-1 cursor-pointer"
+                  >
+                    <Save className="w-3.5 h-3.5" />
+                    <span>บันทึกห้องนี้</span>
+                  </button>
+                  <button
+                    onClick={() => handleOpenInvoice(room)}
+                    className="flex-1 py-2 bg-[#963720] hover:bg-[#822E1A] text-white text-xs font-semibold rounded-xl flex items-center justify-center space-x-1 cursor-pointer"
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>ใบแจ้งหนี้</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* SPREADSHEET ENTRY TABLE (DESKTOP) */}
+      <div className="hidden md:block bg-white rounded-2xl border border-[#E2DDD5] overflow-hidden shadow-2xs">
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse table-fixed min-w-[980px]">
             {/* Explicit Balanced Column Width Allocation */}

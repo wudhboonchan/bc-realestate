@@ -5,7 +5,11 @@ import { useProperty } from '@/context/PropertyContext';
 import { Menu, Calendar } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
-export function TopHeader() {
+interface TopHeaderProps {
+  onOpenMobileMenu?: () => void;
+}
+
+export function TopHeader({ onOpenMobileMenu }: TopHeaderProps) {
   const pathname = usePathname();
   const { selectedMonth, setSelectedMonth } = useProperty();
 
@@ -31,25 +35,32 @@ export function TopHeader() {
   };
 
   return (
-    <header className="bg-[#FAF7F2] border-b border-[#E2DDD5] px-8 py-3.5 flex items-center justify-between sticky top-0 z-20 select-none">
-      {/* Left: Breadcrumb matching screenshot */}
-      <div className="flex items-center space-x-3 text-xs">
-        <Menu className="w-4 h-4 text-stone-600" />
-        <div className="flex items-center space-x-1.5 font-medium">
-          <span className="font-semibold text-stone-900">{getPageTitle()}</span>
+    <header className="bg-[#FAF7F2] border-b border-[#E2DDD5] px-4 sm:px-6 md:px-8 py-3 flex items-center justify-between sticky top-0 z-20 select-none">
+      {/* Left: Mobile Menu Button & Breadcrumb */}
+      <div className="flex items-center space-x-2.5 sm:space-x-3 text-xs">
+        <button
+          onClick={onOpenMobileMenu}
+          className="p-1.5 rounded-xl bg-stone-200/70 hover:bg-stone-300 text-stone-700 md:hidden transition-colors cursor-pointer"
+          aria-label="Open navigation menu"
+        >
+          <Menu className="w-5 h-5 text-stone-800" />
+        </button>
+
+        <div className="flex items-center space-x-1.5 font-medium truncate">
+          <span className="font-bold text-stone-900 text-xs sm:text-sm truncate">{getPageTitle()}</span>
           <span className="text-stone-400">/</span>
-          <span className="text-stone-500 font-mono">{selectedMonth}</span>
+          <span className="text-stone-500 font-mono text-[11px] sm:text-xs">{selectedMonth}</span>
         </div>
       </div>
 
       {/* Right: Month Selector Dropdown Pill */}
-      <div className="flex items-center space-x-3">
-        <div className="flex items-center space-x-2 bg-white px-3 py-1.5 rounded-xl border border-[#E2DDD5] shadow-2xs">
-          <Calendar className="w-3.5 h-3.5 text-stone-500" />
+      <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1.5 sm:space-x-2 bg-white px-2.5 sm:px-3 py-1.5 rounded-xl border border-[#E2DDD5] shadow-2xs">
+          <Calendar className="w-3.5 h-3.5 text-stone-500 shrink-0" />
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="bg-transparent text-xs font-semibold text-stone-800 outline-none cursor-pointer pr-1"
+            className="bg-transparent text-[11px] sm:text-xs font-semibold text-stone-800 outline-none cursor-pointer pr-0.5"
           >
             {availableMonths.map((m: string) => (
               <option key={m} value={m}>

@@ -102,22 +102,22 @@ export default function InvoicesPage() {
           </p>
         </div>
 
-        <div className="flex items-center space-x-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0 w-full md:w-auto">
           <button
             type="button"
             onClick={() => setShowLogsModal(true)}
-            className="px-3.5 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-semibold border border-stone-300 transition-colors flex items-center space-x-1.5 cursor-pointer"
+            className="flex-1 md:flex-none px-3.5 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-semibold border border-stone-300 transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
             title="ดูประวัติการส่งข้อความย้อนหลัง"
           >
             <History className="w-4 h-4 text-stone-600" />
-            <span>ประวัติการส่ง LINE ({lineDeliveryLogs.length})</span>
+            <span>ประวัติการส่ง ({lineDeliveryLogs.length})</span>
           </button>
 
           <button
             type="button"
             onClick={handleSendAllLine}
             disabled={sendingLine === 'all' || currentBills.length === 0}
-            className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center space-x-2 disabled:opacity-50 cursor-pointer"
+            className="flex-1 md:flex-none px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold shadow-xs transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 cursor-pointer"
           >
             {sendingLine === 'all' ? (
               <RefreshCw className="w-4 h-4 animate-spin" />
@@ -149,15 +149,128 @@ export default function InvoicesPage() {
           <button
             type="button"
             onClick={() => setSendingStatus(null)}
-            className="p-1 hover:bg-black/5 rounded-lg text-stone-500"
+            className="p-1 hover:bg-black/5 rounded-lg text-stone-500 cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
       )}
 
-      {/* Invoices List Table */}
-      <div className="bg-white rounded-2xl border border-[#E2DDD5] overflow-hidden shadow-2xs">
+      {/* MOBILE INVOICE CARDS (< md breakpoint) */}
+      <div className="space-y-3 md:hidden">
+        {currentBills.map((bill, index) => {
+          const tenant = tenants.find((t) => t.id === bill.tenantId || t.assignedRoomId === bill.roomId);
+          const hasLineId = Boolean(tenant?.lineUserId || (bill as any).lineUserId);
+          const tenantLang = bill.receiptLanguage || tenant?.preferredLanguage || 'TH';
+
+          return (
+            <div
+              key={`mob-${bill.id}-${index}`}
+              className="bg-white p-4 rounded-2xl border border-[#E2DDD5] shadow-2xs space-y-3 text-xs"
+            >
+              {/* Card Top Header */}
+              <div className="flex items-center justify-between border-b border-stone-100 pb-2">
+                <div className="flex items-center space-x-2">
+                  <span className="font-mono font-bold text-stone-900 text-xs bg-stone-100 px-2 py-0.5 rounded border border-stone-300">
+                    ห้อง {bill.roomNumber}
+                  </span>
+                  <span className="font-bold text-stone-900 text-xs">
+                    {tenantLang === 'MY' || tenantLang === 'MM' ? '🇲🇲' : '🇹🇭'} {bill.tenantName}
+                  </span>
+                </div>
+
+                {/* Status Payment Button */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateBillStatus(
+                      bill.id,
+                      bill.status === 'paid' ? 'pending' : 'paid'
+                    )
+                  }
+                  className={`inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border transition-colors cursor-pointer ${
+                    bill.status === 'paid'
+                      ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                      : 'bg-[#F4DCD6] text-[#963720] border-[#D8C7B5]'
+                  }`}
+                >
+                  {bill.status === 'paid' ? '✓ จ่ายแล้ว' : '✕ ค้างจ่าย'}
+                </button>
+              </div>
+
+              {/* Bill Details Breakdown Grid */}
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-[11px] text-stone-600 bg-[#FAF7F2] p-2.5 rounded-xl border border-[#E2DDD5]">
+                <div>ค่าเช่าห้อง: <span className="font-bold text-stone-800">฿{bill.rentAmount.toLocaleString()}</span></div>
+                <div>ค่าน้ำ ({bill.waterUnits} u): <span className="font-bold text-stone-800">฿{bill.waterAmount}</span></div>
+                <div>ค่าไฟฟ้า ({bill.elecUnits} u): <span className="font-bold text-stone-800">฿{bill.elecAmount}</span></div>
+                <div>ค่าขยะ: <span className="font-bold text-stone-800">฿{bill.garbageFee}</span></div>
+              </div>
+
+              {/* Total & LINE Delivery Status */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] text-stone-400 uppercase block font-semibold">ยอดรวมสุทธิ</span>
+                  <span className="font-mono text-base font-bold text-[#963720]">
+                    ฿{bill.totalAmount.toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="text-right">
+                  {bill.lineSentStatus === 'sent' ? (
+                    <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                      <MessageSquare className="w-3 h-3 text-emerald-600" />
+                      <span>ส่งแล้ว</span>
+                    </span>
+                  ) : bill.lineSentStatus === 'failed' ? (
+                    <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                      <AlertCircle className="w-3 h-3 text-rose-600" />
+                      <span>ส่งไม่สำเร็จ</span>
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-stone-100 text-stone-500 border border-stone-200">
+                      <span>ยังไม่ส่ง</span>
+                    </span>
+                  )}
+                  {hasLineId ? (
+                    <span className="text-[9px] text-emerald-700 font-medium block mt-0.5">✓ ผูก LINE แล้ว</span>
+                  ) : (
+                    <span className="text-[9px] text-stone-400 block mt-0.5">⚪ ยังไม่ผูก LINE</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Mobile Card Actions */}
+              <div className="flex gap-2 pt-1 border-t border-stone-100">
+                <button
+                  type="button"
+                  onClick={() => handleSendSingleLine(bill)}
+                  disabled={sendingLine === bill.id}
+                  className="flex-1 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold flex items-center justify-center space-x-1 disabled:opacity-50 cursor-pointer"
+                >
+                  {sendingLine === bill.id ? (
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <Send className="w-3.5 h-3.5" />
+                  )}
+                  <span>ส่ง LINE</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedBill(bill)}
+                  className="flex-1 py-2 bg-[#963720] hover:bg-[#822E1A] text-white rounded-xl text-xs font-semibold flex items-center justify-center space-x-1 cursor-pointer"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>ดูใบแจ้งหนี้</span>
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Invoices List Table (DESKTOP) */}
+      <div className="hidden md:block bg-white rounded-2xl border border-[#E2DDD5] overflow-hidden shadow-2xs">
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left">
             <thead className="bg-[#FAF7F2] border-b border-[#E2DDD5] text-stone-700 font-bold uppercase">

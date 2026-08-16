@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { PropertyProvider } from '@/context/PropertyContext';
-import { Sidebar } from '@/components/layout/Sidebar';
-import { TopHeader } from '@/components/layout/TopHeader';
-import { Footer } from '@/components/layout/Footer';
+import { AppShell } from '@/components/layout/AppShell';
 import { FirebaseErrorSuppressor } from '@/components/layout/FirebaseErrorSuppressor';
 
 export const metadata: Metadata = {
@@ -21,14 +19,7 @@ export default function RootLayout({
       <body className="font-sans bg-[#FAF9F6] text-stone-800 min-h-screen flex selection:bg-stone-800 selection:text-white">
         <FirebaseErrorSuppressor />
         <PropertyProvider>
-          <div className="flex w-full min-h-screen">
-            <Sidebar />
-            <div className="flex-1 flex flex-col min-w-0">
-              <TopHeader />
-              <main className="flex-1 p-8 overflow-y-auto">{children}</main>
-              <Footer />
-            </div>
-          </div>
+          <AppShell>{children}</AppShell>
         </PropertyProvider>
       </body>
     </html>

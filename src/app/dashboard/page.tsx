@@ -94,7 +94,7 @@ export default function DashboardPage() {
         </div>
 
         {/* JOINED 4-METRIC GRID WITH VERTICAL DIVIDERS */}
-        <div className="bg-white rounded-xl border border-[#E2DDD5] overflow-hidden shadow-2xs grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-stone-200">
+        <div className="bg-white rounded-xl border border-[#E2DDD5] overflow-hidden shadow-2xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 lg:divide-x divide-stone-200">
           {/* Card 1: Total Rooms */}
           <div className="p-5 space-y-2">
             <span className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider block">

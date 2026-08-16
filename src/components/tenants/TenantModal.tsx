@@ -150,7 +150,7 @@ export function TenantModal({ isOpen, tenantToEdit, onClose }: TenantModalProps)
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4 text-xs">
           {/* Nationality & Preferred Language */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-stone-600 font-medium mb-1">
                 สัญชาติผู้เช่า <span className="text-rose-500">*</span>
@@ -201,7 +201,7 @@ export function TenantModal({ isOpen, tenantToEdit, onClose }: TenantModalProps)
           </div>
 
           {/* Name Fields */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-stone-600 font-medium mb-1">
                 ชื่อ <span className="text-rose-500">*</span>
@@ -229,7 +229,7 @@ export function TenantModal({ isOpen, tenantToEdit, onClose }: TenantModalProps)
           </div>
 
           {/* Phone & Assigned Room */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-stone-600 font-medium mb-1">เบอร์โทรศัพท์</label>
               <input
