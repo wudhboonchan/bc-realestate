@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateInvoiceFlexMessage } from '@/lib/line/flexTemplates';
 import { MonthlyBill, Tenant, LineDeliveryLog } from '@/types';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -18,7 +21,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+    const rawToken = process.env.LINE_CHANNEL_ACCESS_TOKEN || '';
+    const channelAccessToken = rawToken.replace(/^["']|["']$/g, '').trim();
     const origin = request.headers.get('origin') || request.headers.get('host') || 'bc-apartment.vercel.app';
     const protocol = origin.includes('localhost') ? 'http' : 'https';
     const baseUrl = origin
