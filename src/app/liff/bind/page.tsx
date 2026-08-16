@@ -14,6 +14,7 @@ function LineBindForm() {
   const [phone, setPhone] = useState('');
   const [lineUserId, setLineUserId] = useState('');
   const [preferredLanguage, setPreferredLanguage] = useState<LanguageOption>('TH');
+  const [uiLanguage, setUiLanguage] = useState<LanguageOption>('TH');
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -25,6 +26,56 @@ function LineBindForm() {
     }
   }, [searchParams]);
 
+  const isBurmese = uiLanguage === 'MY' || uiLanguage === 'MM';
+
+  const labels = isBurmese
+    ? {
+        title: 'LINE Official Account အကောင့်ချိတ်ဆက်ရန်',
+        subtitle: 'တန်ဒေအိမ်ရာ · လစဉ် ဘေလ်စာရင်း လက်ခံရရှိရေး စနစ်',
+        formTitle: 'အိမ်ငှား အချက်အလက် အတည်ပြုရန်',
+        formSub: 'ကျေးဇူးပြု၍ အခန်းနံပါတ်နှင့် ဖုန်းနံပါတ် ထည့်သွင်းပါ',
+        roomLabel: 'အခန်းနံပါတ် (Room Number) *',
+        roomPlaceholder: 'ဥပမာ A1, B1, C2',
+        phoneLabel: 'ဖုန်းနံပါတ် (Phone Number) *',
+        phonePlaceholder: '08x-xxx-xxxx',
+        langLabel: 'ဘေလ်စာရင်း လက်ခံလိုသော ဘာသာစကား',
+        lineIdLabel: 'LINE User ID (အကောင့် ID)',
+        lineIdPlaceholder: 'ဥပမာ U10a9b8c7d6e5f4...',
+        lineIdHelp: '(LINE User ID ကို ကူးယူပြီး ဤနေရာတွင် ထည့်သွင်းပါ)',
+        submitBtn: 'အခန်းနှင့် LINE အကောင့် ချိတ်ဆက်မည်',
+        submittingBtn: 'ချိတ်ဆက်နေပါသည်...',
+        successTitle: 'အကောင့် ချိတ်ဆက်မှု အောင်မြင်ပါသည်!',
+        registeredInfo: '✓ မှတ်ပုံတင်ထားသော အချက်အလက်များ:',
+        successFooter: 'လစဉ် ဘေလ်စာရင်းများကို LINE မှတဆင့် တိုက်ရိုက် ပေးပို့သွားမည် ဖြစ်ပါသည်။',
+        errNoRoom: 'ကျေးဇူးပြု၍ အခန်းနံပါတ် ထည့်သွင်းပါ (ဥပမာ A1, B1)',
+        errNoPhone: 'ကျေးဇူးပြု၍ ဖုန်းနံပါတ် ထည့်သွင်းပါ',
+        errNoLineId: 'ကျေးဇူးပြု၍ LINE User ID ထည့်သွင်းပါ',
+        errNotFound: 'ထည့်သွင်းထားသော အခန်း သို့မဟုတ် ဖုန်းနံပါတ် မတွေ့ရှိပါ။',
+      }
+    : {
+        title: 'ผูกบัญชี LINE Official Account',
+        subtitle: 'หอพักตาลเดี่ยว · ระบบรับใบแจ้งหนี้ค่าเช่าอัตโนมัติ',
+        formTitle: 'ยืนยันข้อมูลผู้เช่าเพื่อผูกบัญชี',
+        formSub: 'กรุณากรอกเลขห้องพักและเบอร์โทรศัพท์ที่ให้ไว้กับหอพัก',
+        roomLabel: 'เลขห้องพัก (Room Number) *',
+        roomPlaceholder: 'เช่น A1, B1, C2, D3',
+        phoneLabel: 'เบอร์โทรศัพท์ผู้เช่า (Phone Number) *',
+        phonePlaceholder: '08x-xxx-xxxx',
+        langLabel: 'ภาษาสำหรับรับบิลใบแจ้งหนี้ (Preferred Language)',
+        lineIdLabel: 'LINE User ID (รหัสรับใบแจ้งหนี้)',
+        lineIdPlaceholder: 'เช่น U10a9b8c7d6e5f4...',
+        lineIdHelp: '(คุณสามารถคัดลอกรหัส LINE User ID มาพิมพ์ หรือวางในช่องนี้ได้เลยครับ)',
+        submitBtn: 'ผูกบัญชี LINE กับห้องพัก',
+        submittingBtn: 'กำลังยืนยันการผูกบัญชี...',
+        successTitle: 'ผูกบัญชีเรียบร้อยแล้ว!',
+        registeredInfo: '✓ ข้อมูลการลงทะเบียน:',
+        successFooter: 'ท่านจะได้รับใบแจ้งหนี้ประจำเดือนผ่านทาง LINE OA นี้ทันทีเมื่อถึงกำหนดออกบิล',
+        errNoRoom: 'กรุณาระบุเลขห้องพัก (เช่น A1, B1, C2)',
+        errNoPhone: 'กรุณากรอกเบอร์โทรศัพท์ที่ลงทะเบียนไว้กับหอพัก',
+        errNoLineId: 'กรุณากรอกหรือวาง LINE User ID',
+        errNotFound: 'ไม่พบข้อมูลผู้เช่าตรงกับห้องและเบอร์โทรศัพท์นี้',
+      };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -34,17 +85,17 @@ function LineBindForm() {
     const cleanPhone = phone.replace(/[^0-9]/g, '');
 
     if (!cleanRoomNum) {
-      setErrorMessage('กรุณาระบุเลขห้องพัก (เช่น A1, B1, C2)');
+      setErrorMessage(labels.errNoRoom);
       return;
     }
 
     if (!cleanPhone) {
-      setErrorMessage('กรุณากรอกเบอร์โทรศัพท์ที่ลงทะเบียนไว้กับหอพัก');
+      setErrorMessage(labels.errNoPhone);
       return;
     }
 
     if (!lineUserId.trim()) {
-      setErrorMessage('กรุณากรอกหรือวาง LINE User ID');
+      setErrorMessage(labels.errNoLineId);
       return;
     }
 
@@ -78,13 +129,12 @@ function LineBindForm() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        setSuccessMessage(data.message || `ผูกบัญชี LINE สำหรับห้อง ${cleanRoomNum} เรียบร้อยแล้ว!`);
+        setSuccessMessage(data.message || `${labels.successTitle} (${cleanRoomNum})`);
       } else {
-        // Even if remote returns notice, if client tenant was found and bound, consider it success
         if (targetTenant) {
-          setSuccessMessage(`ผูกบัญชี LINE สำหรับห้อง ${cleanRoomNum} เรียบร้อยแล้ว!`);
+          setSuccessMessage(`${labels.successTitle} (${cleanRoomNum})`);
         } else {
-          setErrorMessage(data.error || 'ไม่พบข้อมูลผู้เช่าตรงกับห้องและเบอร์โทรศัพท์นี้');
+          setErrorMessage(data.error || labels.errNotFound);
         }
       }
     } catch (err: any) {
@@ -96,17 +146,41 @@ function LineBindForm() {
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-stone-800 flex flex-col justify-between p-4 sm:p-6 font-sans">
-      <div className="max-w-md w-full mx-auto space-y-6 pt-4">
+      <div className="max-w-md w-full mx-auto space-y-4 pt-2">
+        {/* Language Switcher Bar */}
+        <div className="flex justify-end items-center">
+          <div className="bg-white p-1 rounded-xl border border-[#E2DDD5] shadow-2xs flex items-center space-x-1 text-xs">
+            <button
+              type="button"
+              onClick={() => setUiLanguage('TH')}
+              className={`px-3 py-1 rounded-lg font-bold transition-all ${
+                !isBurmese ? 'bg-[#963720] text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
+              }`}
+            >
+              🇹🇭 ไทย
+            </button>
+            <button
+              type="button"
+              onClick={() => setUiLanguage('MY')}
+              className={`px-3 py-1 rounded-lg font-bold transition-all ${
+                isBurmese ? 'bg-[#963720] text-white shadow-2xs' : 'text-stone-600 hover:text-stone-900'
+              }`}
+            >
+              🇲🇲 မြန်မာ
+            </button>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="bg-[#963720] text-white p-6 rounded-3xl shadow-md text-center space-y-2">
           <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center mx-auto border border-white/20">
             <MessageSquare className="w-7 h-7 text-emerald-300" />
           </div>
           <h1 className="text-xl font-bold font-serif tracking-tight">
-            ผูกบัญชี LINE Official Account
+            {labels.title}
           </h1>
           <p className="text-xs text-stone-200">
-            หอพักตาลเดี่ยว · ระบบรับใบแจ้งหนี้ค่าเช่าอัตโนมัติ
+            {labels.subtitle}
           </p>
         </div>
 
@@ -117,25 +191,25 @@ function LineBindForm() {
               <CheckCircle2 className="w-10 h-10" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-stone-900">ผูกบัญชีเรียบร้อยแล้ว!</h2>
+              <h2 className="text-lg font-bold text-stone-900">{labels.successTitle}</h2>
               <p className="text-xs text-stone-600 mt-1">{successMessage}</p>
             </div>
             <div className="p-4 bg-stone-50 rounded-2xl text-xs text-stone-500 text-left space-y-1 border border-stone-200">
-              <p className="font-semibold text-stone-700">✓ ข้อมูลการลงทะเบียน:</p>
-              <p>• ห้องพัก: <span className="font-bold text-stone-900">{roomNumber.toUpperCase()}</span></p>
-              <p>• ภาษาข้อความ: <span className="font-bold text-stone-900">{preferredLanguage === 'MY' || preferredLanguage === 'MM' ? 'ภาษาพม่า (မြန်မာ)' : 'ภาษาไทย'}</span></p>
+              <p className="font-semibold text-stone-700">{labels.registeredInfo}</p>
+              <p>• {labels.roomLabel.replace(' *', '')}: <span className="font-bold text-stone-900">{roomNumber.toUpperCase()}</span></p>
+              <p>• {labels.langLabel}: <span className="font-bold text-stone-900">{preferredLanguage === 'MY' || preferredLanguage === 'MM' ? 'မြန်မာစာ' : 'ภาษาไทย'}</span></p>
               <p>• LINE User ID: <span className="font-mono text-[10px] text-stone-600">{lineUserId}</span></p>
             </div>
             <p className="text-xs text-emerald-700 font-medium">
-              ท่านจะได้รับใบแจ้งหนี้ประจำเดือนผ่านทาง LINE OA นี้ทันทีเมื่อถึงกำหนดออกบิล
+              {labels.successFooter}
             </p>
           </div>
         ) : (
           /* Form Card */
           <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-6 border border-[#E2DDD5] shadow-xs space-y-5">
             <div className="border-b border-stone-100 pb-3">
-              <h2 className="text-base font-bold text-stone-900">ยืนยันข้อมูลผู้เช่าเพื่อผูกบัญชี</h2>
-              <p className="text-xs text-stone-500">กรุณากรอกเลขห้องพักและเบอร์โทรศัพท์ที่ให้ไว้กับหอพัก</p>
+              <h2 className="text-base font-bold text-stone-900">{labels.formTitle}</h2>
+              <p className="text-xs text-stone-500">{labels.formSub}</p>
             </div>
 
             {errorMessage && (
@@ -149,13 +223,13 @@ function LineBindForm() {
             <div className="space-y-1">
               <label className="block text-xs font-semibold text-stone-700 flex items-center space-x-1">
                 <Building2 className="w-3.5 h-3.5 text-[#963720]" />
-                <span>เลขห้องพัก (Room Number) *</span>
+                <span>{labels.roomLabel}</span>
               </label>
               <input
                 type="text"
                 value={roomNumber}
                 onChange={(e) => setRoomNumber(e.target.value.toUpperCase())}
-                placeholder="เช่น A1, B1, C2, D3"
+                placeholder={labels.roomPlaceholder}
                 className="w-full border border-stone-300 rounded-xl p-3 text-sm font-bold uppercase text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
                 required
               />
@@ -165,13 +239,13 @@ function LineBindForm() {
             <div className="space-y-1">
               <label className="block text-xs font-semibold text-stone-700 flex items-center space-x-1">
                 <Phone className="w-3.5 h-3.5 text-[#963720]" />
-                <span>เบอร์โทรศัพท์ผู้เช่า (Phone Number) *</span>
+                <span>{labels.phoneLabel}</span>
               </label>
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="08x-xxx-xxxx"
+                placeholder={labels.phonePlaceholder}
                 className="w-full border border-stone-300 rounded-xl p-3 text-sm text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
                 required
               />
@@ -181,12 +255,15 @@ function LineBindForm() {
             <div className="space-y-1">
               <label className="block text-xs font-semibold text-stone-700 flex items-center space-x-1">
                 <Globe className="w-3.5 h-3.5 text-[#963720]" />
-                <span>ภาษาสำหรับรับบิลใบแจ้งหนี้ (Preferred Language)</span>
+                <span>{labels.langLabel}</span>
               </label>
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
                   type="button"
-                  onClick={() => setPreferredLanguage('TH')}
+                  onClick={() => {
+                    setPreferredLanguage('TH');
+                    setUiLanguage('TH');
+                  }}
                   className={`p-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center space-x-2 ${
                     preferredLanguage === 'TH'
                       ? 'bg-[#963720] text-white border-[#963720] shadow-2xs'
@@ -197,7 +274,10 @@ function LineBindForm() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setPreferredLanguage('MY')}
+                  onClick={() => {
+                    setPreferredLanguage('MY');
+                    setUiLanguage('MY');
+                  }}
                   className={`p-3 rounded-xl border text-xs font-bold transition-all flex items-center justify-center space-x-2 ${
                     preferredLanguage === 'MY' || preferredLanguage === 'MM'
                       ? 'bg-[#963720] text-white border-[#963720] shadow-2xs'
@@ -213,17 +293,17 @@ function LineBindForm() {
             <div className="space-y-1">
               <label className="block text-xs font-semibold text-stone-700 flex items-center space-x-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#963720]" />
-                <span>LINE User ID (รหัสรับใบแจ้งหนี้)</span>
+                <span>{labels.lineIdLabel}</span>
               </label>
               <input
                 type="text"
                 value={lineUserId}
                 onChange={(e) => setLineUserId(e.target.value)}
-                placeholder="เช่น U10a9b8c7d6e5f4..."
+                placeholder={labels.lineIdPlaceholder}
                 className="w-full border border-stone-300 rounded-xl p-3 text-xs font-mono text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none bg-white"
               />
               <span className="text-[10px] text-stone-400 block pt-0.5">
-                (คุณสามารถคัดลอกรหัส LINE User ID มาพิมพ์ หรือวางในช่องนี้ได้เลยครับ)
+                {labels.lineIdHelp}
               </span>
             </div>
 
@@ -234,7 +314,7 @@ function LineBindForm() {
               className="w-full bg-[#963720] hover:bg-[#822E1A] text-white font-bold text-sm py-3.5 rounded-2xl shadow-md transition-all flex items-center justify-center space-x-2 disabled:opacity-50 cursor-pointer"
             >
               <ShieldCheck className="w-5 h-5" />
-              <span>{loading ? 'กำลังยืนยันการผูกบัญชี...' : 'ผูกบัญชี LINE กับห้องพัก'}</span>
+              <span>{loading ? labels.submittingBtn : labels.submitBtn}</span>
             </button>
           </form>
         )}
