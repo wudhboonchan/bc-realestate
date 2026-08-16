@@ -200,7 +200,7 @@ ${getTranslation('MM', 'dueDate')}: ${formattedDueDate}
                 {getTranslation(lang, 'roomNo')}
               </span>
               <div className="text-xl font-bold text-stone-900">{bill.roomNumber}</div>
-              <span className="text-[11px] text-stone-500">โซน {bill.zoneCode}</span>
+              <span className="text-[11px] text-stone-500">{getTranslation(lang, 'zone')} {bill.zoneCode}</span>
             </div>
 
             <div>
@@ -240,7 +240,7 @@ ${getTranslation('MM', 'dueDate')}: ${formattedDueDate}
                   <td className="p-2.5 font-medium text-stone-900">
                     <div>{getTranslation(lang, 'waterFee')}</div>
                     <div className="text-[11px] text-stone-500 font-mono font-normal">
-                      (มิเตอร์: {waterPrev} ➔ {waterCurr})
+                      ({getTranslation(lang, 'meter')}: {waterPrev} ➔ {waterCurr})
                     </div>
                   </td>
                   <td className="p-2.5 text-center font-mono text-stone-800">{bill.waterUnits}</td>
@@ -253,7 +253,7 @@ ${getTranslation('MM', 'dueDate')}: ${formattedDueDate}
                   <td className="p-2.5 font-medium text-stone-900">
                     <div>{getTranslation(lang, 'elecFee')}</div>
                     <div className="text-[11px] text-stone-500 font-mono font-normal">
-                      (มิเตอร์: {elecPrev} ➔ {elecCurr})
+                      ({getTranslation(lang, 'meter')}: {elecPrev} ➔ {elecCurr})
                     </div>
                   </td>
                   <td className="p-2.5 text-center font-mono text-stone-800">{bill.elecUnits}</td>

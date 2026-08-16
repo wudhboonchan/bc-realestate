@@ -36,6 +36,8 @@ const burmeseDict = {
     lineShareButton: 'LINE မှတဆင့် ပို့ရန်',
     thaiTenant: 'ထိုင်း',
     burmeseTenant: 'မြန်မာ',
+    zone: 'ဇုန်',
+    meter: 'မီတာ',
 };
 
 export const dictionary: Record<LanguageOption, Record<string, string>> = {
@@ -75,6 +77,8 @@ export const dictionary: Record<LanguageOption, Record<string, string>> = {
     lineShareButton: 'ส่งใบแจ้งหนี้ทาง LINE',
     thaiTenant: 'คนไทย',
     burmeseTenant: 'ชาวพม่า',
+    zone: 'โซน',
+    meter: 'มิเตอร์',
   },
   MM: burmeseDict,
   MY: burmeseDict,

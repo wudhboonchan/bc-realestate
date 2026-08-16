@@ -64,26 +64,29 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
   const labels = isBurmese
     ? {
         title: 'လစဉ် ဘေလ်စာရင်း',
-        subTitle: 'ใบแจ้งหนี้ค่าเช่าประจำเดือน',
-        invoiceNo: 'ဘေလ်နံပါတ် / เลขที่:',
-        date: 'ရက်စွဲ / วันที่:',
-        dueDate: 'ပေးရန်ရက် / กำหนดชำระ:',
-        room: 'အခန်း / ห้อง:',
-        tenant: 'အိမ်ငှား / ผู้เช่า:',
-        description: 'အကြောင်းအရာ / รายการ',
-        units: 'ယူနစ် / หน่วย',
-        amount: 'ကျသင့်ငွေ / จำนวนเงิน (บาท)',
-        rent: 'အခန်းခ (ค่าเช่าห้องพัก)',
-        water: 'ရေဖိုး (ค่าน้ำประปา)',
-        elec: 'မီးဖိုး (ค่าไฟฟ้า)',
-        garbage: 'အမှိုက်ခ (ค่าบริการขยะ/อื่นๆ)',
-        total: 'စုစုပေါင်း (ยอดรวมสุทธิ)',
-        statusPaid: 'ငွေပေးချေပြီး (จ่ายแล้ว)',
-        statusPending: 'ပေးရန်ကျန် (ค้างจ่าย)',
-        scanToPay: 'สแกน QR Code เพื่อชำระเงินผ่าน PromptPay',
-        accName: 'ชื่อบัญชี:',
-        accNo: 'เลขที่บัญชี PromptPay:',
-        print: 'พิมพ์ใบแจ้งหนี้ (Print / PDF)',
+        subTitle: 'MONTHLY INVOICE & UTILITY BILL',
+        invoiceNo: 'ဘေလ်နံပါတ်:',
+        date: 'ရက်စွဲ:',
+        dueDate: 'ပေးရန်ရက်:',
+        room: 'အခန်း:',
+        roomPrefix: 'အခန်း',
+        zone: 'ဇုန်',
+        tenant: 'အိမ်ငှား:',
+        description: 'အကြောင်းအရာ',
+        units: 'သုံးစွဲယူနစ်',
+        amount: 'ကျသင့်ငွေ (ဘတ်)',
+        rent: 'အခန်းခ',
+        water: 'ရေဖိုး',
+        elec: 'မီးဖိုး',
+        garbage: 'အမှိုက်ခ',
+        meter: 'မီတာ',
+        total: 'စုစုပေါင်းကျသင့်ငွေ',
+        statusPaid: 'ငွေပေးချေပြီး',
+        statusPending: 'ပေးရန်ကျန်',
+        scanToPay: 'PromptPay QR စကင်ဖတ်၍ ငွေပေးချေပါ',
+        accName: 'အကောင့်အမည်:',
+        accNo: 'PromptPay နံပါတ်:',
+        print: 'ตောင်းခံလွှာထုတ်ယူရန် (Print / PDF)',
       }
     : {
         title: 'ใบแจ้งหนี้ค่าเช่าประจำเดือน',
@@ -92,6 +95,8 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
         date: 'วันที่ออกเอกสาร:',
         dueDate: 'กำหนดชำระเงินภายใน:',
         room: 'ห้องพักเลขที่:',
+        roomPrefix: 'ห้อง',
+        zone: 'โซน',
         tenant: 'ชื่อผู้เช่า:',
         description: 'รายการค่าใช้จ่าย',
         units: 'หน่วยที่ใช้',
@@ -100,6 +105,7 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
         water: 'ค่าน้ำประปา',
         elec: 'ค่าไฟฟ้า',
         garbage: 'ค่าบริการขยะ/อื่นๆ',
+        meter: 'มิเตอร์',
         total: 'ยอดรวมสุทธิที่ต้องชำระ',
         statusPaid: 'ชำระเงินเรียบร้อยแล้ว',
         statusPending: 'รอการชำระเงิน',
@@ -206,7 +212,10 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
           <div className="grid grid-cols-2 gap-4 bg-stone-50/70 p-4 rounded-2xl border border-stone-200/80 text-xs">
             <div>
               <span className="text-stone-500 block">{labels.room}</span>
-              <span className="text-base font-mono font-bold text-stone-900">ห้อง {bill.roomNumber}</span>
+              <span className="text-base font-mono font-bold text-stone-900">{labels.roomPrefix} {bill.roomNumber}</span>
+              {bill.zoneCode && (
+                <span className="text-xs text-stone-500 font-normal block">{labels.zone} {bill.zoneCode}</span>
+              )}
             </div>
             <div>
               <span className="text-stone-500 block">{labels.tenant}</span>
@@ -238,7 +247,7 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
                     {labels.water}
                     {bill.waterPrevious !== undefined && bill.waterCurrent !== undefined && (
                       <span className="block text-[10px] text-stone-500 font-mono">
-                        (เลขมิเตอร์: {bill.waterPrevious} ➔ {bill.waterCurrent})
+                        ({labels.meter}: {bill.waterPrevious} ➔ {bill.waterCurrent})
                       </span>
                     )}
                   </td>
@@ -253,7 +262,7 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
                     {labels.elec}
                     {bill.elecPrevious !== undefined && bill.elecCurrent !== undefined && (
                       <span className="block text-[10px] text-stone-500 font-mono">
-                        (เลขมิเตอร์: {bill.elecPrevious} ➔ {bill.elecCurrent})
+                        ({labels.meter}: {bill.elecPrevious} ➔ {bill.elecCurrent})
                       </span>
                     )}
                   </td>
@@ -297,7 +306,9 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
                 {labels.accNo} <span className="font-bold text-stone-900">{property?.promptPayId}</span>
               </p>
               <p className="text-[11px] text-stone-400">
-                สแกนผ่านแอป Mobile Banking ได้ทุกธนาคาร ยอดเงินจะตรงตามใบแจ้งหนี้อัตโนมัติ
+                {isBurmese
+                  ? 'တိကျသော ပမာဏပါရှိသော QR စကင်ဖတ်၍ ငွေပေးချေပါ'
+                  : 'สแกนผ่านแอป Mobile Banking ได้ทุกธนาคาร ยอดเงินจะตรงตามใบแจ้งหนี้อัตโนมัติ'}
               </p>
             </div>
 
