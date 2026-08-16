@@ -24,10 +24,10 @@ export function generateInvoiceFlexMessage(
   const garbageStr = `฿${(bill.garbageFee || 0).toLocaleString()}`;
   const totalStr = `฿${(bill.totalAmount || 0).toLocaleString()}`;
 
-  // Multi-language text strings
+  // Multi-language text strings (Action label must be max 20 characters according to LINE API spec)
   const texts = isBurmese
     ? {
-        altText: `လစဉ် ဘေလ်စာရင်း ${formattedMonth} - အခန်း ${bill.roomNumber}`,
+        altText: `လစဉ် ဘေလ်စာရင်း ${formattedMonth} - อุปกรณ์ ${bill.roomNumber}`,
         headerTitle: 'လစဉ် ဘေလ်စာရင်း',
         headerPeriod: `ประจำเดือน / လအတွက်: ${formattedMonth}`,
         roomLabel: 'အခန်း / ห้อง:',
@@ -38,7 +38,7 @@ export function generateInvoiceFlexMessage(
         garbageLabel: 'အမှိုက်ခ (ค่าขยะ)',
         totalLabel: 'စုစုပေါင်း (ยอดรวมสุทธิ)',
         dueDateLabel: 'ပေးရန်ရက် / กำหนดชำระ:',
-        buttonLabel: 'ဘေလ်အပြည့်အစုံကြည့်ရန် / ငွေပေးချေရန်',
+        buttonLabel: 'ကြည့်ရန် / ငွေပေးချေရန်',
         tagLine: 'ကျေးဇူးတင်ပါသည်။ / ขอบคุณครับ',
       }
     : {
@@ -53,13 +53,12 @@ export function generateInvoiceFlexMessage(
         garbageLabel: 'ค่าบริการขยะ/อื่นๆ',
         totalLabel: 'ยอดรวมสุทธิที่ต้องชำระ',
         dueDateLabel: 'กำหนดชำระเงินภายใน:',
-        buttonLabel: 'เปิดดูใบแจ้งหนี้ฉบับเต็ม / ชำระเงิน',
+        buttonLabel: 'เปิดดูบิล / ชำระเงิน',
         tagLine: 'กรุณาชำระเงินตามกำหนดเวลา ขอบคุณครับ',
       };
 
   const flexContainer = {
     type: 'bubble',
-    size: 'mega',
     header: {
       type: 'box',
       layout: 'vertical',
