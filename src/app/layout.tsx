@@ -7,6 +7,11 @@ import { FirebaseErrorSuppressor } from '@/components/layout/FirebaseErrorSuppre
 export const metadata: Metadata = {
   title: 'บุญจันทร์ เรียลเอสเตตท์ | หอพักตาลเดี่ยว',
   description: 'ระบบจัดการค่าเช่ารายเดือน จดมิเตอร์น้ำ-ไฟ ใบแจ้งหนี้ 2 ภาษา (ไทย/พม่า) สำหรับ หอพักตาลเดี่ยว',
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({
