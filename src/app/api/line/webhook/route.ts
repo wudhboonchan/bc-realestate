@@ -28,7 +28,6 @@ export async function POST(request: NextRequest) {
       if (event.type === 'follow' || event.type === 'message') {
         const replyToken = event.replyToken;
         const lineUserId = event.source?.userId;
-        const userText = event.message?.text?.trim() || '';
 
         if (replyToken && lineUserId && channelAccessToken) {
           const domain = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'bc-apartment.vercel.app';
@@ -37,11 +36,14 @@ export async function POST(request: NextRequest) {
           // Personalized link with auto-embedded line_user_id
           const bindUrl = `${hostUrl}/liff/bind?line_user_id=${lineUserId}`;
 
-          let replyTextMessage = `ยินดีต้อนรับสู่ระบบหอพักตาลเดี่ยว! 🏢\n\nกรุณากดลิงก์ด้านล่างนี้เพื่อผูกบัญชี LINE กับห้องพักของคุณ (ระบบจะดึงรหัส LINE อัตโนมัติ ไม่ต้องกรอกรหัสยุ่งยากครับ):\n\n🔗 ${bindUrl}`;
+          // Bilingual greeting & binding link (Thai + Burmese)
+          const replyTextMessage = `ขอบคุณที่ติดต่อหอพักตาลเดี่ยวค่ะ 🏢
+หากท่านต้องการผูกบัญชีเพื่อรับใบแจ้งหนี้ค่าเช่าประจำเดือน กรุณากดลิงก์ด้านล่างนี้ได้เลยค่ะ:
 
-          if (userText) {
-            replyTextMessage = `ขอบคุณที่ติดต่อหอพักตาลเดี่ยวค่ะ 🏢\n\nหากท่านต้องการผูกบัญชีเพื่อรับใบแจ้งหนี้ค่าเช่าประจำเดือน กรุณากดลิงก์ด้านล่างนี้ได้เลยค่ะ (ไม่ต้องกรอกรหัส LINE ID):\n\n🔗 ${bindUrl}`;
-          }
+တန်ဒေအိမ်ရာသို့ ဆက်သွယ်ပေးပါသောကြောင့် ကျေးဇူးတင်ပါသည်။ 🏢
+လစဉ် ဘေလ်စာရင်း လက်ခံရရှိရန် အောက်ပါလင့်ခ်ကို နှိပ်၍ အကောင့်ချိတ်ဆက်နိုင်ပါသည်:
+
+🔗 ${bindUrl}`;
 
           const replyMessage = {
             replyToken: replyToken,
