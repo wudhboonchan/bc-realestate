@@ -19,10 +19,6 @@ function LineBindForm() {
     const urlLineId = searchParams.get('line_user_id') || searchParams.get('userId');
     if (urlLineId) {
       setLineUserId(urlLineId);
-    } else {
-      // Auto-generate or fallback dev ID if opened outside LIFF
-      const mockId = `U${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 10)}`;
-      setLineUserId(mockId);
     }
   }, [searchParams]);
 
@@ -184,12 +180,22 @@ function LineBindForm() {
               </div>
             </div>
 
-            {/* LINE User ID Info */}
-            <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-[11px] text-stone-500 space-y-1">
-              <span className="font-semibold text-stone-700 block">LINE User ID:</span>
-              <code className="font-mono text-[10px] bg-white px-2 py-0.5 rounded border border-stone-300 block truncate">
-                {lineUserId || 'กำลังดึง LINE User ID...'}
-              </code>
+            {/* LINE User ID Input */}
+            <div className="space-y-1">
+              <label className="block text-xs font-semibold text-stone-700 flex items-center space-x-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#963720]" />
+                <span>LINE User ID (รหัสรับใบแจ้งหนี้)</span>
+              </label>
+              <input
+                type="text"
+                value={lineUserId}
+                onChange={(e) => setLineUserId(e.target.value)}
+                placeholder="เช่น U10a9b8c7d6e5f4..."
+                className="w-full border border-stone-300 rounded-xl p-3 text-xs font-mono text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none bg-white"
+              />
+              <span className="text-[10px] text-stone-400 block pt-0.5">
+                (คุณสามารถคัดลอกรหัส LINE User ID มาพิมพ์ หรือวางในช่องนี้ได้เลยครับ)
+              </span>
             </div>
 
             {/* Submit Button */}
