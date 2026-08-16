@@ -17,26 +17,33 @@ export async function POST(request: NextRequest) {
     const events = body.events || [];
 
     const channelAccessToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-    const origin = request.headers.get('origin') || request.headers.get('host') || '';
-    const protocol = origin.includes('localhost') ? 'http' : 'https';
-    const baseUrl = origin ? (origin.startsWith('http') ? origin : `${protocol}://${origin}`) : '';
 
     for (const event of events) {
       if (event.type === 'follow' || event.type === 'message') {
         const replyToken = event.replyToken;
         const lineUserId = event.source?.userId;
+        const userText = event.message?.text?.trim() || '';
 
-        if (replyToken && channelAccessToken) {
+        if (replyToken && channelAccessToken && lineUserId) {
           const domain = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'bc-apartment.vercel.app';
           const hostUrl = domain.startsWith('http') ? domain : `https://${domain}`;
-          const bindUrl = `${hostUrl}/liff/bind?line_user_id=${lineUserId || ''}`;
+          
+          // Personalized link with auto-embedded line_user_id
+          const bindUrl = `${hostUrl}/liff/bind?line_user_id=${lineUserId}`;
+
+          let replyTextMessage = `ยินดีต้อนรับสู่ระบบหอพักตาลเดี่ยว! 🏢\n\nกรุณากดลิงก์ด้านล่างนี้เพื่อผูกบัญชี LINE กับห้องพักของคุณ (ระบบจะดึงรหัส LINE อัตโนมัติ ไม่ต้องกรอกรหัสยุ่งยากครับ):\n\n🔗 ${bindUrl}`;
+
+          // Check if user typed room number directly e.g. "A1", "B2", "C3"
+          if (userText && userText.length <= 10) {
+            replyTextMessage = `ขอบคุณที่ติดต่อหอพักตาลเดี่ยวค่ะ 🏢\n\nหากท่านต้องการผูกบัญชีเพื่อรับใบแจ้งหนี้ค่าเช่าประจำเดือน กรุณากดลิงก์ด้านล่างนี้ได้เลยค่ะ (ไม่ต้องกรอกรหัส LINE ID):\n\n🔗 ${bindUrl}`;
+          }
 
           const replyMessage = {
             replyToken: replyToken,
             messages: [
               {
                 type: 'text',
-                text: `ยินดีต้อนรับสู่ระบบหอพักตาลเดี่ยว! 🏢\n\nกรุณากดลิงก์ด้านล่างนี้เพื่อผูกบัญชี LINE กับห้องพักของคุณ เพื่อรับใบแจ้งหนี้อัตโนมัติ:\n\n🔗 ${bindUrl}`,
+                text: replyTextMessage,
               },
             ],
           };
