@@ -200,6 +200,35 @@ export default function SettingsPage() {
                 className="w-full p-2.5 border border-[#E2DDD5] rounded-xl font-mono text-xs text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
               />
             </div>
+
+            {/* Generated Webhook URL for LINE Developers Console */}
+            <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl space-y-2">
+              <span className="font-bold text-emerald-800 block text-xs">
+                🔗 Webhook URL สำหรับนำไปวางใน LINE Developers Console:
+              </span>
+              <p className="text-[11px] text-emerald-700">
+                คัดลอกข้อความในช่องนี้ ไปวางที่เมนู <b>Messaging API ➔ Webhook settings ➔ Webhook URL</b> ในเว็บ developers.line.biz
+              </p>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={`https://bc-apartment.vercel.app/api/line/webhook${lineChannelAccessToken ? `?token=${encodeURIComponent(lineChannelAccessToken.trim())}` : ''}`}
+                  className="w-full p-2 bg-white border border-emerald-300 rounded-lg font-mono text-[10px] text-stone-800 outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const webhookUrl = `https://bc-apartment.vercel.app/api/line/webhook${lineChannelAccessToken ? `?token=${encodeURIComponent(lineChannelAccessToken.trim())}` : ''}`;
+                    navigator.clipboard.writeText(webhookUrl);
+                    alert('คัดลอก Webhook URL เรียบร้อยแล้ว! นำไปวางที่ LINE Developers Console ➔ Webhook URL ได้เลยครับ');
+                  }}
+                  className="px-3 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-bold text-xs shrink-0 cursor-pointer"
+                >
+                  คัดลอก Webhook URL
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
