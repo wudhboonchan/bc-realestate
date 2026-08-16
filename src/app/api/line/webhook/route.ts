@@ -24,34 +24,21 @@ export async function POST(request: NextRequest) {
         const lineUserId = event.source?.userId;
 
         if (replyToken && channelAccessToken) {
-          const bindUrl = `${baseUrl}/liff/bind?line_user_id=${lineUserId || ''}`;
+          const domain = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'bc-apartment.vercel.app';
+          const hostUrl = domain.startsWith('http') ? domain : `https://${domain}`;
+          const bindUrl = `${hostUrl}/liff/bind?line_user_id=${lineUserId || ''}`;
 
           const replyMessage = {
             replyToken: replyToken,
             messages: [
               {
                 type: 'text',
-                text: 'ยินดีต้อนรับสู่ระบบหอพักตาลเดี่ยว! 🏢\n\nกรุณากดลิงก์ด้านล่างนี้เพื่อผูกบัญชี LINE กับห้องพักของคุณ เพื่อรับใบแจ้งหนี้อัตโนมัติในทุกๆ เดือนครับ',
-              },
-              {
-                type: 'template',
-                altText: 'ผูกบัญชีห้องพักหอพักตาลเดี่ยว',
-                template: {
-                  type: 'buttons',
-                  text: 'กดปุ่มด้านล่างเพื่อผูกบัญชี LINE เข้ากับเลขห้องพักของคุณ',
-                  actions: [
-                    {
-                      type: 'uri',
-                      label: '🔗 ผูกบัญชีห้องพัก',
-                      uri: bindUrl,
-                    },
-                  ],
-                },
+                text: `ยินดีต้อนรับสู่ระบบหอพักตาลเดี่ยว! 🏢\n\nกรุณากดลิงก์ด้านล่างนี้เพื่อผูกบัญชี LINE กับห้องพักของคุณ เพื่อรับใบแจ้งหนี้อัตโนมัติ:\n\n🔗 ${bindUrl}`,
               },
             ],
           };
 
-          await fetch('https://api.line.me/v2/bot/message/reply', {
+          const res = await fetch('https://api.line.me/v2/bot/message/reply', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -59,6 +46,11 @@ export async function POST(request: NextRequest) {
             },
             body: JSON.stringify(replyMessage),
           });
+
+          if (!res.ok) {
+            const errText = await res.text();
+            console.error('LINE Reply API Failed:', res.status, errText);
+          }
         }
       }
     }
