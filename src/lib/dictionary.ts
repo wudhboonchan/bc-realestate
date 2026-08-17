@@ -20,7 +20,7 @@ const burmeseDict = {
     roomRent: 'အခန်းခ',
     waterFee: 'ရေဖိုး',
     elecFee: 'မီးဖိုး',
-    garbageFee: 'အမှိုက်ခ',
+    garbageFee: 'အမှိုက်သိမ်းခ',
     totalAmount: 'စုစုပေါင်းကျသင့်ငွေ',
     status: 'အခြေအနေ',
     paidStatus: 'ပေးပြီးပါပြီ',

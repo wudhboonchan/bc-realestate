@@ -40,7 +40,7 @@ export function generateInvoiceFlexMessage(
         rentLabel: 'အခန်းခ',
         waterLabel: `ရေဖိုး (${bill.waterUnits || 0} ယူနစ်)`,
         elecLabel: `မီးဖိုး (${bill.elecUnits || 0} ယူနစ်)`,
-        garbageLabel: 'အမှိုက်ခ',
+        garbageLabel: 'အမှိုက်သိမ်းခ',
         totalLabel: 'စုစုပေါင်း ပေးရန်',
         dueDateLabel: 'ပေးရန်ရက်:',
         buttonLabel: 'ဘေလ်ကြည့်ရန် / ပေးရန်',

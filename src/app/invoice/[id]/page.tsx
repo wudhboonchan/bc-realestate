@@ -78,7 +78,7 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
         rent: 'အခန်းခ',
         water: 'ရေဖိုး',
         elec: 'မီးဖိုး',
-        garbage: 'အမှိုက်ခ',
+        garbage: 'အမှိုက်သိမ်းခ',
         meter: 'မီတာ',
         total: 'စုစုပေါင်းကျသင့်ငွေ',
         statusPaid: 'ငွေပေးချေပြီး',
