@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
     // Support token from URL parameter e.g. /api/line/webhook?token=... or Vercel env variable
     const urlToken = request.nextUrl.searchParams.get('token') || request.nextUrl.searchParams.get('channelAccessToken');
-    const channelAccessToken = urlToken || process.env.LINE_CHANNEL_ACCESS_TOKEN;
+    const channelAccessToken = urlToken || process.env.LINE_CHANNEL_ACCESS_TOKEN || process.env.NEXT_PUBLIC_LINE_CHANNEL_ACCESS_TOKEN;
 
     if (!channelAccessToken) {
       console.warn('LINE Webhook Warning: LINE_CHANNEL_ACCESS_TOKEN is missing in process.env and query params');
