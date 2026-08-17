@@ -60,7 +60,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* Decorative Seal Watermark Background */}
         <div className="absolute -right-3 -top-3 w-24 h-24 rounded-full border-4 border-stone-300/30 flex items-center justify-center pointer-events-none opacity-40">
           <div className="w-16 h-16 rounded-full border border-dashed border-stone-400 text-[8px] font-mono text-stone-500 flex items-center justify-center text-center leading-tight">
-            BOONCHAN<br />ESTATE
+            BOONCHAN<br />REAL<br />ESTATE
           </div>
         </div>
       </div>
@@ -89,16 +89,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               key={item.href}
               href={item.href}
               onClick={onClose}
-              className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs transition-all duration-150 ${
-                isActive
+              className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs transition-all duration-150 ${isActive
                   ? 'bg-[#EAE1D5] text-[#963720] font-bold shadow-[#963720]/10'
                   : 'text-stone-700 hover:bg-[#FAF7F2] hover:text-stone-900 font-medium'
-              }`}
+                }`}
             >
               <Icon
-                className={`w-4 h-4 ${
-                  isActive ? 'text-[#963720]' : 'text-stone-500'
-                }`}
+                className={`w-4 h-4 ${isActive ? 'text-[#963720]' : 'text-stone-500'
+                  }`}
               />
               <span>{item.name}</span>
             </Link>

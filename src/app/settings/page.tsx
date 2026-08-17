@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useProperty } from '@/context/PropertyContext';
-import { Settings, Save, Plus, QrCode, MessageSquare } from 'lucide-react';
+import { Settings, Save, Plus, QrCode, MessageSquare, Zap, Building2 } from 'lucide-react';
 
 export default function SettingsPage() {
   const { property, updatePropertyRates, zones, addZone } = useProperty();
@@ -75,61 +75,64 @@ export default function SettingsPage() {
           <span>การตั้งค่าอัตราค่าบริการและบัญชี PromptPay</span>
         </h1>
         <p className="text-xs text-stone-500 mt-0.5">
-          กำหนดเรทค่าน้ำ-ไฟ-ขยะมาตรฐาน และตั้งค่า PromptPay ID สำหรับ Dynamic QR Code สแกนชำระเงิน
+          กำหนดเรทค่าน้ำ-ไฟ-ขยะมาตรฐาน ตั้งค่า PromptPay ID และเชื่อมต่อ LINE Official Account
         </p>
       </div>
 
-      {/* Standard Rates & PromptPay Card */}
-      <form onSubmit={handleSaveRates} className="bg-white rounded-2xl border border-[#E2DDD5] p-6 shadow-2xs space-y-5">
-        <h3 className="text-base font-bold text-stone-900 font-serif border-b border-[#E2DDD5] pb-3">
-          1. อัตราค่าบริการมาตรฐาน (Standard Rates)
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div>
-            <label className="block text-stone-700 font-semibold mb-1">
-              ค่าน้ำประปา (บาท / หน่วย)
-            </label>
-            <input
-              type="number"
-              value={waterRate}
-              onChange={(e) => setWaterRate(Number(e.target.value))}
-              className="w-full p-2.5 border border-[#E2DDD5] rounded-xl font-mono font-bold text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
-              required
-            />
+      <form onSubmit={handleSaveRates} className="space-y-6">
+        {/* Card 1: Standard Rates */}
+        <div className="bg-white rounded-2xl border border-[#E2DDD5] p-6 shadow-2xs space-y-4">
+          <div className="flex items-center space-x-2 font-serif font-bold text-stone-900 text-base border-b border-[#E2DDD5] pb-3">
+            <Zap className="w-5 h-5 text-[#963720]" />
+            <span>1. อัตราค่าบริการมาตรฐาน (Standard Rates)</span>
           </div>
 
-          <div>
-            <label className="block text-stone-700 font-semibold mb-1">
-              ค่าไฟฟ้า (บาท / หน่วย)
-            </label>
-            <input
-              type="number"
-              value={elecRate}
-              onChange={(e) => setElecRate(Number(e.target.value))}
-              className="w-full p-2.5 border border-[#E2DDD5] rounded-xl font-mono font-bold text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
-              required
-            />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <div>
+              <label className="block text-stone-700 font-semibold mb-1">
+                ค่าน้ำประปา (บาท / หน่วย)
+              </label>
+              <input
+                type="number"
+                value={waterRate}
+                onChange={(e) => setWaterRate(Number(e.target.value))}
+                className="w-full p-2.5 border border-[#E2DDD5] rounded-xl font-mono font-bold text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
+                required
+              />
+            </div>
 
-          <div>
-            <label className="block text-stone-700 font-semibold mb-1">
-              ค่าขยะส่วนกลาง (บาท / ห้อง / เดือน)
-            </label>
-            <input
-              type="number"
-              value={garbageFee}
-              onChange={(e) => setGarbageFee(Number(e.target.value))}
-              className="w-full p-2.5 border border-[#E2DDD5] rounded-xl font-mono font-bold text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
-              required
-            />
+            <div>
+              <label className="block text-stone-700 font-semibold mb-1">
+                ค่าไฟฟ้า (บาท / หน่วย)
+              </label>
+              <input
+                type="number"
+                value={elecRate}
+                onChange={(e) => setElecRate(Number(e.target.value))}
+                className="w-full p-2.5 border border-[#E2DDD5] rounded-xl font-mono font-bold text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-stone-700 font-semibold mb-1">
+                ค่าขยะส่วนกลาง (บาท / ห้อง / เดือน)
+              </label>
+              <input
+                type="number"
+                value={garbageFee}
+                onChange={(e) => setGarbageFee(Number(e.target.value))}
+                className="w-full p-2.5 border border-[#E2DDD5] rounded-xl font-mono font-bold text-stone-900 focus:ring-2 focus:ring-[#963720] outline-none"
+                required
+              />
+            </div>
           </div>
         </div>
 
-        {/* PromptPay Settings */}
-        <div className="pt-3 border-t border-[#E2DDD5] space-y-3">
-          <div className="flex items-center space-x-2 font-serif font-bold text-stone-900 text-sm">
-            <QrCode className="w-4 h-4 text-[#963720]" />
+        {/* Card 2: PromptPay Settings */}
+        <div className="bg-white rounded-2xl border border-[#E2DDD5] p-6 shadow-2xs space-y-4">
+          <div className="flex items-center space-x-2 font-serif font-bold text-stone-900 text-base border-b border-[#E2DDD5] pb-3">
+            <QrCode className="w-5 h-5 text-[#963720]" />
             <span>2. ตั้งค่าบัญชี PromptPay รับเงิน (สำหรับ Dynamic QR Code)</span>
           </div>
 
@@ -164,10 +167,10 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* LINE Messaging API Settings */}
-        <div className="pt-3 border-t border-[#E2DDD5] space-y-3">
-          <div className="flex items-center space-x-2 font-serif font-bold text-stone-900 text-sm">
-            <MessageSquare className="w-4 h-4 text-emerald-600" />
+        {/* Card 3: LINE Messaging API Settings */}
+        <div className="bg-white rounded-2xl border border-[#E2DDD5] p-6 shadow-2xs space-y-4">
+          <div className="flex items-center space-x-2 font-serif font-bold text-stone-900 text-base border-b border-[#E2DDD5] pb-3">
+            <MessageSquare className="w-5 h-5 text-emerald-600" />
             <span>3. ตั้งค่าการเชื่อมต่อ LINE Official Account (LINE Messaging API)</span>
           </div>
           <p className="text-[11px] text-stone-500">
@@ -232,22 +235,24 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="pt-2 flex justify-end">
+        {/* Save Button for Settings */}
+        <div className="flex justify-end">
           <button
             type="submit"
-            className="bg-[#963720] hover:bg-[#822E1A] text-white text-xs font-semibold px-5 py-2.5 rounded-xl shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer"
+            className="bg-[#963720] hover:bg-[#822E1A] text-white text-xs font-semibold px-6 py-3 rounded-xl shadow-md transition-colors flex items-center space-x-2 cursor-pointer"
           >
             <Save className="w-4 h-4" />
-            <span>บันทึกการเปลี่ยนแปลงทั้งหมด</span>
+            <span>บันทึกการเปลี่ยนแปลงทั้งหมด (ข้อ 1, 2, 3)</span>
           </button>
         </div>
       </form>
 
-      {/* Zone Management Card */}
+      {/* Card 4: Zone Expansion */}
       <div className="bg-white rounded-2xl border border-[#E2DDD5] p-6 shadow-2xs space-y-4">
-        <h3 className="text-base font-bold text-stone-900 font-serif border-b border-[#E2DDD5] pb-3">
-          3. การขยายโซนห้องพัก (Future Zone Expansion)
-        </h3>
+        <div className="flex items-center space-x-2 font-serif font-bold text-stone-900 text-base border-b border-[#E2DDD5] pb-3">
+          <Building2 className="w-5 h-5 text-stone-800" />
+          <span>4. การขยายโซนห้องพัก (Future Zone Expansion)</span>
+        </div>
 
         <div className="space-y-2">
           <span className="text-xs font-semibold text-stone-600 block">โซนปัจจุบันที่มีในระบบ:</span>
