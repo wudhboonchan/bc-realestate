@@ -8,7 +8,7 @@ export const revalidate = 0;
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { bills, tenants, propertyName = 'หอพักบุญจันทร์', channelAccessToken: bodyToken } = body as {
+    const { bills, tenants, propertyName = 'หอพักบุญจันทร์ (ตาลเดี่ยว)', channelAccessToken: bodyToken } = body as {
       bills: MonthlyBill[];
       tenants: Tenant[];
       propertyName?: string;

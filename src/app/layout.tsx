@@ -5,8 +5,8 @@ import { AppShell } from '@/components/layout/AppShell';
 import { FirebaseErrorSuppressor } from '@/components/layout/FirebaseErrorSuppressor';
 
 export const metadata: Metadata = {
-  title: 'บุญจันทร์ เรียลเอสเตตท์ | หอพักบุญจันทร์',
-  description: 'ระบบจัดการค่าเช่ารายเดือน จดมิเตอร์น้ำ-ไฟ ใบแจ้งหนี้ 2 ภาษา (ไทย/พม่า) สำหรับ หอพักบุญจันทร์',
+  title: 'บุญจันทร์ เรียลเอสเตตท์ | หอพักบุญจันทร์ (ตาลเดี่ยว)',
+  description: 'ระบบจัดการค่าเช่ารายเดือน จดมิเตอร์น้ำ-ไฟ ใบแจ้งหนี้ 2 ภาษา (ไทย/พม่า) สำหรับ หอพักบุญจันทร์ (ตาลเดี่ยว)',
   icons: {
     icon: [
       { url: '/logo.png?v=2', type: 'image/png' },

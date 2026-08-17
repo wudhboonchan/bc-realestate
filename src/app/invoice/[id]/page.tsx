@@ -123,7 +123,7 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
           <div className="flex items-center space-x-2">
             <Building2 className="w-5 h-5 text-[#963720]" />
             <span className="text-xs font-bold text-stone-900 font-serif">
-              {property?.name || 'หอพักบุญจันทร์'} · ใบแจ้งหนี้สำหรับผู้เช่า
+              {property?.name || 'หอพักบุญจันทร์ (ตาลเดี่ยว)'} · ใบแจ้งหนี้สำหรับผู้เช่า
             </span>
           </div>
 
@@ -166,7 +166,7 @@ export default function TenantPublicInvoicePage({ params }: InvoicePageProps) {
               <div className="flex items-center space-x-2 text-[#963720]">
                 <Building2 className="w-6 h-6" />
                 <h1 className="text-xl font-bold font-serif tracking-tight text-stone-900">
-                  {property?.name || 'หอพักบุญจันทร์'}
+                  {property?.name || 'หอพักบุญจันทร์ (ตาลเดี่ยว)'}
                 </h1>
               </div>
               <p className="text-xs text-stone-500 max-w-xs">{property?.address}</p>

@@ -31,7 +31,7 @@ function LineBindForm() {
   const labels = isBurmese
     ? {
         title: 'LINE Official Account အကောင့်ချိတ်ဆက်ရန်',
-        subtitle: 'ဘုန်းဂျန်းအိမ်ရာ · လစဉ် ဘေလ်စာရင်း လက်ခံရရှိရေး စနစ်',
+        subtitle: 'ဘုန်းဂျန်း အပါတ်မန့် (တန်ဒေ) · လစဉ် ဘေလ်စာရင်း လက်ခံရရှိရေး စနစ်',
         formTitle: 'အိမ်ငှား အချက်အလက် အတည်ပြုရန်',
         formSub: 'ကျေးဇူးပြု၍ အခန်းနံပါတ်နှင့် ဖုန်းနံပါတ် ထည့်သွင်းပါ',
         roomLabel: 'အခန်းနံပါတ် (Room Number) *',
@@ -52,7 +52,7 @@ function LineBindForm() {
       }
     : {
         title: 'ผูกบัญชี LINE Official Account',
-        subtitle: 'หอพักบุญจันทร์ · ระบบรับใบแจ้งหนี้ค่าเช่าอัตโนมัติ',
+        subtitle: 'หอพักบุญจันทร์ (ตาลเดี่ยว) · ระบบรับใบแจ้งหนี้ค่าเช่าอัตโนมัติ',
         formTitle: 'ยืนยันข้อมูลผู้เช่าเพื่อผูกบัญชี',
         formSub: 'กรอกเฉพาะเลขห้องพักและเบอร์โทรศัพท์ที่ลงทะเบียนไว้กับหอพัก',
         roomLabel: 'เลขห้องพัก (Room Number) *',
@@ -341,7 +341,7 @@ function LineBindForm() {
         </div>
 
         <footer className="text-center text-stone-400 text-[11px] pt-1">
-          © 2026 หอพักบุญจันทร์ · ระบบบริหารจัดการหอพักผ่าน LINE
+          © 2026 หอพักบุญจันทร์ (ตาลเดี่ยว) · ระบบบริหารจัดการหอพักผ่าน LINE
         </footer>
       </div>
     </div>

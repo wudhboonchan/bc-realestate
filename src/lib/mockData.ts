@@ -10,7 +10,7 @@ import {
 
 export const initialProperty: Property = {
   id: 'tan-deaw',
-  name: 'หอพักบุญจันทร์',
+  name: 'หอพักบุญจันทร์ (ตาลเดี่ยว)',
   code: 'BC',
   address: '75 หมู่ 2 ถ.สุดบรรทัด ต.ตาลเดี่ยว อ.แก่งคอย จ.สระบุรี 18110',
   waterRatePerUnit: 7,

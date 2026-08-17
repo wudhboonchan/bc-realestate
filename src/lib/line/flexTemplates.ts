@@ -11,7 +11,7 @@ import { MonthlyBill } from '@/types';
  */
 export function generateInvoiceFlexMessage(
   bill: MonthlyBill,
-  propertyName: string = 'หอพักบุญจันทร์',
+  propertyName: string = 'หอพักบุญจันทร์ (ตาลเดี่ยว)',
   baseUrl: string = ''
 ) {
   const isBurmese = bill.receiptLanguage === 'MY' || bill.receiptLanguage === 'MM';
