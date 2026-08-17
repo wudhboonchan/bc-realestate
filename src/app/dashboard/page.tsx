@@ -244,26 +244,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Tenant Nationality Breakdown Card */}
-          <div className="bg-[#FAF7F2] p-6 rounded-2xl border border-[#E2DDD5] shadow-2xs space-y-4">
-            <span className="text-[11px] font-semibold text-stone-500 uppercase tracking-widest block">
-              NATIONALITY · สัญชาติผู้เช่า
-            </span>
 
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 bg-white border border-[#E2DDD5] rounded-xl text-center shadow-2xs">
-                <span className="text-lg block mb-0.5">🇹🇭</span>
-                <span className="font-bold text-stone-900 text-sm">{thaiTenantsCount} คน</span>
-                <span className="text-[10px] text-stone-500 block font-medium">คนไทย</span>
-              </div>
-
-              <div className="p-3 bg-white border border-[#E2DDD5] rounded-xl text-center shadow-2xs">
-                <span className="text-lg block mb-0.5">🇲🇲</span>
-                <span className="font-bold text-stone-900 text-sm">{burmeseTenantsCount} คน</span>
-                <span className="text-[10px] text-stone-500 block font-medium">ชาวพม่า</span>
-              </div>
-            </div>
-          </div>
 
           {/* Quick Shortcuts */}
           <div className="bg-white p-6 rounded-2xl border border-[#E2DDD5] shadow-2xs space-y-3">
