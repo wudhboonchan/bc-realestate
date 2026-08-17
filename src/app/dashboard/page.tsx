@@ -14,6 +14,30 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+function formatYearThaiMonth(monthYear: string): string {
+  if (!monthYear) return '';
+  const parts = monthYear.split('-');
+  if (parts.length !== 2) return monthYear;
+
+  const [year, month] = parts;
+  const thaiMonths: Record<string, string> = {
+    '01': 'มกราคม',
+    '02': 'กุมภาพันธ์',
+    '03': 'มีนาคม',
+    '04': 'เมษายน',
+    '05': 'พฤษภาคม',
+    '06': 'มิถุนายน',
+    '07': 'กรกฎาคม',
+    '08': 'สิงหาคม',
+    '09': 'กันยายน',
+    '10': 'ตุลาคม',
+    '11': 'พฤศจิกายน',
+    '12': 'ธันวาคม',
+  };
+
+  return `${year}-${thaiMonths[month] || month}`;
+}
+
 export default function DashboardPage() {
   const { property, rooms, tenants, bills, selectedMonth, landlordExpenses } = useProperty();
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
@@ -58,7 +82,7 @@ export default function DashboardPage() {
             </span>
             <div className="flex items-baseline space-x-3">
               <h1 className="text-2xl font-bold tracking-tight text-stone-900 font-serif">
-                {selectedMonth}
+                {formatYearThaiMonth(selectedMonth)}
               </h1>
             </div>
             <span className="text-xs text-stone-500 block">
