@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
         const lineUserId = event.source?.userId;
 
         if (replyToken && lineUserId && channelAccessToken) {
-          const domain = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'bc-apartment.vercel.app';
+          const domain = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'bcapartment.vercel.app';
           const hostUrl = domain.startsWith('http') ? domain : `https://${domain}`;
           
           // Personalized link with auto-embedded line_user_id

@@ -19,7 +19,7 @@ export function generateInvoiceFlexMessage(
     ? baseUrl.startsWith('http')
       ? baseUrl
       : `https://${baseUrl}`
-    : 'https://bc-apartment.vercel.app';
+    : 'https://bcapartment.vercel.app';
   const invoiceUrl = `${cleanBaseUrl}/invoice/${bill.id}`;
 
   const formattedMonth = bill.monthYear;

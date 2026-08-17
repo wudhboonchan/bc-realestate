@@ -20,6 +20,14 @@ export default function SettingsPage() {
   const [newZoneCode, setNewZoneCode] = useState('');
   const [newZoneName, setNewZoneName] = useState('');
 
+  const [origin, setOrigin] = useState('https://bc-apartment.vercel.app');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.origin) {
+      setOrigin(window.location.origin);
+    }
+  }, []);
+
   useEffect(() => {
     if (property) {
       setWaterRate(property.waterRatePerUnit);
@@ -31,6 +39,8 @@ export default function SettingsPage() {
       setLineChannelSecret(property.lineChannelSecret || '');
     }
   }, [property]);
+
+  const currentWebhookUrl = `${origin}/api/line/webhook${lineChannelAccessToken ? `?token=${encodeURIComponent(lineChannelAccessToken.trim())}` : ''}`;
 
   const handleSaveRates = (e: React.FormEvent) => {
     e.preventDefault();
@@ -216,14 +226,13 @@ export default function SettingsPage() {
                 <input
                   type="text"
                   readOnly
-                  value={`https://bc-apartment.vercel.app/api/line/webhook${lineChannelAccessToken ? `?token=${encodeURIComponent(lineChannelAccessToken.trim())}` : ''}`}
+                  value={currentWebhookUrl}
                   className="w-full p-2 bg-white border border-emerald-300 rounded-lg font-mono text-[10px] text-stone-800 outline-none"
                 />
                 <button
                   type="button"
                   onClick={() => {
-                    const webhookUrl = `https://bc-apartment.vercel.app/api/line/webhook${lineChannelAccessToken ? `?token=${encodeURIComponent(lineChannelAccessToken.trim())}` : ''}`;
-                    navigator.clipboard.writeText(webhookUrl);
+                    navigator.clipboard.writeText(currentWebhookUrl);
                     alert('คัดลอก Webhook URL เรียบร้อยแล้ว! นำไปวางที่ LINE Developers Console ➔ Webhook URL ได้เลยครับ');
                   }}
                   className="px-3 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-bold text-xs shrink-0 cursor-pointer"
