@@ -37,10 +37,10 @@ export async function POST(request: NextRequest) {
           const bindUrl = `${hostUrl}/liff/bind?line_user_id=${lineUserId}`;
 
           // Bilingual greeting & binding link (Thai + Burmese)
-          const replyTextMessage = `ขอบคุณที่ติดต่อหอพักตาลเดี่ยวค่ะ 🏢
+          const replyTextMessage = `ขอบคุณที่ติดต่อหอพักบุญจันทร์ค่ะ 🏢
 หากท่านต้องการผูกบัญชีเพื่อรับใบแจ้งหนี้ค่าเช่าประจำเดือน กรุณากดลิงก์ด้านล่างนี้ได้เลยค่ะ:
 
-တန်ဒေအိမ်ရာသို့ ဆက်သွယ်ပေးပါသောကြောင့် ကျေးဇူးတင်ပါသည်။ 🏢
+ဘုန်းဂျန်းအိမ်ရာသို့ ဆက်သွယ်ပေးပါသောကြောင့် ကျေးဇူးတင်ပါသည်။ 🏢
 လစဉ် ဘေလ်စာရင်း လက်ခံရရှိရန် အောက်ပါလင့်ခ်ကို နှိပ်၍ အကောင့်ချိတ်ဆက်နိုင်ပါသည်:
 
 🔗 ${bindUrl}`;
